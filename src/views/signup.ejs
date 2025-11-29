@@ -4,19 +4,37 @@
   <body
     class="h-screen flex flex-col p-4 bg-neutral-200 font-outfit overflow-y-auto"
   >
-    <h1>Sign Up</h1>
+    <h1 class="text-2xl">Sign Up</h1>
+    <% if (locals?.errors?.length) { %>
+    <ul class="mb-4 text-red-600">
+      <% errors.forEach(err => { %>
+      <li><%= err.msg %></li>
+      <% }) %>
+    </ul>
+    <% } %>
     <form action="" method="POST" class="flex flex-col gap-2 items-start">
       <label for="username">
         Username:
-        <input type="text" name="username" id="username" class="ring-2" />
+        <input
+          type="text"
+          name="username"
+          id="username"
+          class="border p-2 w-full rounded"
+          value="<%= locals?.formData?.username %>"
+        />
       </label>
       <label for="password">
         Password:
-        <input type="password" name="password" id="password" class="ring-2" />
+        <input
+          type="password"
+          name="password"
+          id="password"
+          class="border p-2 w-full rounded"
+        />
       </label>
       <button type="submit" class="border-2 cursor-pointer">Sign Up</button>
     </form>
     <br />
-    <a href="/auth/login">Log In</a>
+    <a href="/auth/login" class="underline">Log In</a>
   </body>
 </html>

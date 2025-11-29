@@ -1,3 +1,4 @@
+import { matchedData, validationResult } from "express-validator";
 import passport from "../config/passport.config.js";
 import { registerUser } from "../services/auth.service.js";
 
@@ -6,7 +7,18 @@ export function getSignup(req, res) {
 }
 
 export async function postSignup(req, res, next) {
-  const { username, password } = req.body;
+  const errors = validationResult(req);
+  console.log(errors);
+
+  if (!errors.isEmpty()) {
+    return res.render("signup", {
+      title: "Sign Up",
+      errors: errors.array(),
+      formData: req.body,
+    });
+  }
+
+  const { username, password } = matchedData(req);
 
   const user = await registerUser({ username, password });
 
@@ -25,7 +37,10 @@ export async function postLogin(req, res, next) {
     if (err) return next(err);
 
     if (!user) {
-      return res.render("login", { title: "Login", error: info?.message });
+      return res.render("login", {
+        title: "Login",
+        errors: [{ msg: info?.message }],
+      });
     }
 
     req.session.regenerate((err) => {
