@@ -6,5 +6,10 @@
   >
     <h1>Welcome to Inner-Circles</h1>
     <%- locals?.message %>
+    <div>
+      <% if(locals?.user){ %>
+      <a href="/auth/logout" class="underline">logout</a>
+      <% }; %>
+    </div>
   </body>
 </html>

@@ -1,5 +1,5 @@
 import session from "express-session";
-import { sessionStore } from "../config/sessionStore.js";
+import { sessionStore } from "../utils/sessionStore.js";
 
 export const sessionMiddleware = session({
   store: sessionStore,

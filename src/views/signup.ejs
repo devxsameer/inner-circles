@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("partials/head") %>
+  <body
+    class="h-screen flex flex-col p-4 bg-neutral-200 font-outfit overflow-y-auto"
+  >
+    <h1>Sign Up</h1>
+    <form action="" method="POST" class="flex flex-col gap-2 items-start">
+      <label for="username">
+        Username:
+        <input type="text" name="username" id="username" class="ring-2" />
+      </label>
+      <label for="password">
+        Password:
+        <input type="password" name="password" id="password" class="ring-2" />
+      </label>
+      <button type="submit" class="border-2 cursor-pointer">Sign Up</button>
+    </form>
+    <br />
+    <a href="/auth/login">Log In</a>
+  </body>
+</html>

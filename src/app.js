@@ -3,6 +3,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { sessionMiddleware } from "./middlewares/session.middleware.js";
 import { setLocals } from "./middlewares/locals.middleware.js";
+import authRoutes from "./routes/auth.routes.js";
+import passport from "./config/passport.config.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -20,23 +22,32 @@ app.use(express.static(path.join(__dirname, "public")));
 // --- Session ---
 app.use(sessionMiddleware);
 
+// --- Auth ---
+app.use(passport.session());
+
 // --- Global Locals ---
 app.use(setLocals);
 
 // --- Routes ---
+app.use("/auth", authRoutes);
 app.get("/", (req, res) => {
-  if (req.session.views) {
-    req.session.views++;
-    res.render("index", {
-      message:
-        "<p>views: " +
-        req.session.views +
-        "</p> <p>expires in: " +
-        req.session.cookie.maxAge / 1000 +
-        "s</p>",
-    });
-  } else {
-    req.session.views = 1;
+  console.log(req.user);
+  if (req.isAuthenticated()) {
+    if (req.session.views) {
+      req.session.views++;
+      res.render("index", {
+        message:
+          "<p>views: " +
+          req.session.views +
+          "</p> <p>expires in: " +
+          req.session.cookie.maxAge / 1000 +
+          "s</p>",
+      });
+    } else {
+      req.session.views = 1;
+    }
     res.render("index", { message: "Welcome to Session. Refresh" });
+  } else {
+    res.redirect("/auth/login");
   }
 });
