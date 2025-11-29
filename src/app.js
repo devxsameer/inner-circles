@@ -5,6 +5,7 @@ import { sessionMiddleware } from "./middlewares/session.middleware.js";
 import { setLocals } from "./middlewares/locals.middleware.js";
 import authRoutes from "./routes/auth.routes.js";
 import passport from "./config/passport.config.js";
+import { ensureAuth } from "./middlewares/auth.middleware.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,9 +46,13 @@ app.get("/", (req, res) => {
       });
     } else {
       req.session.views = 1;
+      res.render("index", { message: "Welcome to Session. Refresh" });
     }
-    res.render("index", { message: "Welcome to Session. Refresh" });
   } else {
     res.redirect("/auth/login");
   }
+});
+
+app.get("/protected", ensureAuth, (req, res) => {
+  res.send("This is the protected route.");
 });

@@ -23,20 +23,29 @@ export function getLogin(req, res) {
 export async function postLogin(req, res, next) {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
-    if (!user)
-      return res.render("login", { title: "Login", error: info?.message });
 
-    console.log(user);
-    req.login(user, (err) => {
+    if (!user) {
+      return res.render("login", { title: "Login", error: info?.message });
+    }
+
+    req.session.regenerate((err) => {
       if (err) return next(err);
-      res.redirect("/");
+
+      req.login(user, (err) => {
+        if (err) return next(err);
+
+        return res.redirect("/");
+      });
     });
   })(req, res, next);
 }
 
 export function getLogout(req, res) {
-  req.logout(() => {
+  req.logout((err) => {
+    if (err) return next(err);
+
     req.session.destroy(() => {
+      res.clearCookie("connect.sid");
       res.redirect("/");
     });
   });

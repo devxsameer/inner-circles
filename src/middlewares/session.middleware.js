@@ -7,8 +7,9 @@ export const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false,
   cookie: {
+    httpOnly: true,
+    secure: false,
     maxAge: 1000 * 60 * 60 * 24 * 7,
     sameSite: "lax",
-    secure: false,
   },
 });
