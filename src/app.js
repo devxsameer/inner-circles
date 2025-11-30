@@ -1,11 +1,21 @@
+// src/app.js
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+
+import passport from "./config/passport.config.js";
+
 import { sessionMiddleware } from "./middlewares/session.middleware.js";
 import { setLocals } from "./middlewares/locals.middleware.js";
-import authRoutes from "./routes/auth.routes.js";
-import passport from "./config/passport.config.js";
 import { ensureAuth } from "./middlewares/auth.middleware.js";
+
+import authRoutes from "./routes/auth.routes.js";
+import clubsRoutes from "./routes/circles.routes.js";
+import indexRoutes from "./routes/index.routes.js";
+
+import globalErrorHandler from "./controllers/error.controller.js";
+
+import AppError from "./utils/appError.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,28 +41,13 @@ app.use(setLocals);
 
 // --- Routes ---
 app.use("/auth", authRoutes);
-app.get("/", (req, res) => {
-  console.log(req.user);
-  if (req.isAuthenticated()) {
-    if (req.session.views) {
-      req.session.views++;
-      res.render("index", {
-        message:
-          "<p>views: " +
-          req.session.views +
-          "</p> <p>expires in: " +
-          req.session.cookie.maxAge / 1000 +
-          "s</p>",
-      });
-    } else {
-      req.session.views = 1;
-      res.render("index", { message: "Welcome to Session. Refresh" });
-    }
-  } else {
-    res.redirect("/auth/login");
-  }
+app.use("/circles", ensureAuth, clubsRoutes);
+app.use("/", indexRoutes);
+
+// --- 404 Handler ---
+app.use((req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-app.get("/protected", ensureAuth, (req, res) => {
-  res.send("This is the protected route.");
-});
+// --- Global Error Handler ---
+app.use(globalErrorHandler);

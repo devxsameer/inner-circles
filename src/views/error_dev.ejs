@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("partials/head") %>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      color: #d9534f;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+  </style>
+  <body>
+    <h1><%= message %></h1>
+    <h2>Stack Trace:</h2>
+    <pre><%= stack %></pre>
+  </body>
+</html>
