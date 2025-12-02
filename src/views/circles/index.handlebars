@@ -1,0 +1,10 @@
+<h1 class="text-2xl">{{title}}</h1>
+
+<div>
+{{> header}}
+  <ul>
+    {{#each circles}}
+      <li>{{this.name}}</li>
+    {{/each}}
+  </ul>
+</div>

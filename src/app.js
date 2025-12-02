@@ -27,16 +27,16 @@ export const app = express();
 
 // --- View Engine ---
 app.engine(
-  "hbs",
+  "handlebars",
   engine({
-    extname: ".hbs",
+    extname: ".handlebars",
     defaultLayout: "main",
     layoutsDir: path.join(__dirname, "views", "layouts"),
     partialsDir: path.join(__dirname, "views", "partials"),
     helpers: hbsHelpers,
   })
 );
-app.set("view engine", "hbs");
+app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
 
 // --- Middleware ---
