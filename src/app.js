@@ -2,8 +2,11 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+import { engine } from "express-handlebars";
 
 import passport from "./config/passport.config.js";
+
+import hbsHelpers from "./helpers/index.js";
 
 import { sessionMiddleware } from "./middlewares/session.middleware.js";
 import { setLocals } from "./middlewares/locals.middleware.js";
@@ -23,12 +26,22 @@ const __dirname = path.dirname(__filename);
 export const app = express();
 
 // --- View Engine ---
-app.set("view engine", "ejs");
+app.engine(
+  "hbs",
+  engine({
+    extname: ".hbs",
+    defaultLayout: "main",
+    layoutsDir: path.join(__dirname, "views", "layouts"),
+    partialsDir: path.join(__dirname, "views", "partials"),
+    helpers: hbsHelpers,
+  })
+);
+app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 
 // --- Middleware ---
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "..", "public")));
 
 // --- Session ---
 app.use(sessionMiddleware);

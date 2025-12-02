@@ -12,8 +12,8 @@
     "start": "node src/server.js",
     "dev": "concurrently -n \"SERVER,TAILWIND\" -c \"cyan,magenta\" \"pnpm dev:server\" \"pnpm dev:css\"",
     "dev:server": "nodemon",
-    "dev:css": "tailwindcss -i ./src/public/css/global.css -o ./src/public/css/output.css --watch --fast",
-    "css:build": "tailwindcss -i ./src/public/css/global.css -o ./src/public/css/output.css --minify"
+    "dev:css": "tailwindcss -i ./public/css/global.css -o ./public/css/output.css --watch --fast",
+    "css:build": "tailwindcss -i ./public/css/global.css -o ./public/css/output.css --minify"
   },
   "keywords": [],
   "author": "",
@@ -29,8 +29,8 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "connect-pg-simple": "^10.0.0",
-    "ejs": "^3.1.10",
     "express": "^5.1.0",
+    "express-handlebars": "^8.0.4",
     "express-rate-limit": "^8.2.1",
     "express-session": "^1.18.2",
     "express-validator": "^7.3.1",
