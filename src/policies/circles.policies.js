@@ -13,7 +13,7 @@ export const canDeletePost = (req, post) => {
 
   const role = req.membership.role;
   if (role === "owner" || role === "admin") return true;
-  return post.author_id === req.user.id;
+  return post.authorId === req.user.id;
 };
 
 export const canManageMembers = (req) => {

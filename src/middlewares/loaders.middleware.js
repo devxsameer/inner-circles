@@ -8,7 +8,7 @@ import AppError from "../utils/appError.js";
    Load Circle
 ------------------------------------------------------- */
 export async function loadCircle(req, res, next) {
-  const { circleId } = req.params;
+  const circleId = req.params?.circleId ?? req.post?.circleId;
 
   const circle = await getCircleById(circleId);
 
