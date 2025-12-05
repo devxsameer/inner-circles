@@ -9,6 +9,7 @@ import {
   getCirclesOwnedByUser,
   getMembershipsInCircle,
 } from "../services/circles.service.js";
+import { getPostsByCircle } from "../services/posts.service.js";
 
 /* -------------------------------------------------------
    SHOW: Create circle form
@@ -43,6 +44,11 @@ export async function createCirclePost(req, res, next) {
 ------------------------------------------------------- */
 export async function showCircle(req, res) {
   const role = req.membership?.role ?? null;
+  const circlePosts = await getPostsByCircle({
+    circleId: req.circle.id,
+    role,
+    viewerId: req.user?.id ?? null,
+  });
 
   if (role === "owner") {
     const members = await getMembershipsInCircle(req.circle.id);
@@ -50,12 +56,14 @@ export async function showCircle(req, res) {
     return res.render("circles/details", {
       title: req.circle.name,
       circle: req.circle,
+      circlePosts,
       members,
     });
   }
 
   res.render("circles/details", {
     title: req.circle.name,
+    circlePosts,
     circle: req.circle,
   });
 }

@@ -25,8 +25,20 @@ export async function createPost({
 /* -------------------------------------------------------
    GET ALL POSTS FROM A CIRCLE
 ------------------------------------------------------- */
-export async function getPostsByCircle({ circleId, viewerId }) {
-  return await getPostsByCircleFromDb({ circleId, viewerId });
+export async function getPostsByCircle({ circleId, viewerId, role }) {
+  if (["owner", "member", "admin"].includes(role)) {
+    return await getPostsByCircleFromDb({
+      circleId,
+      viewerId,
+      visibilityList: ["members_only", "public"],
+    });
+  } else {
+    return await getPostsByCircleFromDb({
+      circleId,
+      viewerId,
+      visibilityList: ["public"],
+    });
+  }
 }
 
 /* -------------------------------------------------------

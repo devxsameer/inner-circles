@@ -40,19 +40,27 @@ export async function createPostInDb({
 /* -------------------------------------------------------
    GET POSTS FOR A CIRCLE
 ------------------------------------------------------- */
-export async function getPostsByCircleFromDb({ circleId, viewerId }) {
+export async function getPostsByCircleFromDb({
+  circleId,
+  viewerId,
+  visibilityList,
+}) {
   const { rows } = await pool.query(
     `SELECT p.*,
             u.username AS author_username,
+            CASE 
+              WHEN cm.user_id IS NOT NULL THEN u.username
+              ELSE NULL
+            END AS author_username,
             (cm.user_id IS NOT NULL) AS viewer_is_member
      FROM posts p
      JOIN users u ON u.id = p.author_id
      LEFT JOIN circle_members cm
        ON cm.circle_id = p.circle_id
       AND cm.user_id = $2
-     WHERE p.circle_id = $1
+     WHERE p.circle_id = $1 AND p.visibility = ANY($3)
      ORDER BY p.created_at DESC`,
-    [circleId, viewerId]
+    [circleId, viewerId, visibilityList]
   );
 
   return rows.map(mapPost);
