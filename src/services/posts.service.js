@@ -12,8 +12,14 @@ import {
 /* -------------------------------------------------------
    CREATE POST
 ------------------------------------------------------- */
-export async function createPost({ circleId, authorId, title, body }) {
-  return await createPostInDb({ circleId, authorId, title, body });
+export async function createPost({
+  circleId,
+  authorId,
+  title,
+  body,
+  visibility,
+}) {
+  return await createPostInDb({ circleId, authorId, title, body, visibility });
 }
 
 /* -------------------------------------------------------

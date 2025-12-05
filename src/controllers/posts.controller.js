@@ -50,21 +50,23 @@ export async function createPostsPost(req, res, next) {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
+    const userCircles = await getCirclesUserIsMemberOf(req.user?.id);
+
     return res.render("posts/create", {
       title: "Create New Post",
       errors: errors.array(),
       formData: req.body,
+      userCircles,
     });
   }
 
-  const { circleId, title, body } = matchedData(req);
-
-  console.log(circleId);
+  const { circleId, title, body, visibility } = matchedData(req);
 
   await createPost({
     circleId,
     title,
     body,
+    visibility,
     authorId: req.user.id,
   });
 

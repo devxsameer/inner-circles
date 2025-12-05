@@ -17,4 +17,8 @@ export const postsValidator = [
     .optional({ checkFalsy: true })
     .isInt()
     .withMessage("Invalid genre selection."),
+  body("visibility")
+    .trim()
+    .isIn(["public", "members_only"])
+    .withMessage("Invalid visibility option."),
 ];

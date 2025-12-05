@@ -20,12 +20,18 @@ function mapPost(row) {
 /* -------------------------------------------------------
    CREATE POST
 ------------------------------------------------------- */
-export async function createPostInDb({ circleId, authorId, title, body }) {
+export async function createPostInDb({
+  circleId,
+  authorId,
+  title,
+  body,
+  visibility,
+}) {
   const { rows } = await pool.query(
-    `INSERT INTO posts (circle_id, author_id, title, body)
-     VALUES ($1, $2, $3, $4)
+    `INSERT INTO posts (circle_id, author_id, title, body, visibility)
+     VALUES ($1, $2, $3, $4, $5)
      RETURNING *`,
-    [circleId, authorId, title, body]
+    [circleId, authorId, title, body, visibility]
   );
 
   return mapPost(rows[0]);

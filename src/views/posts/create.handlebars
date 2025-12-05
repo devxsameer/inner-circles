@@ -46,6 +46,21 @@
 
         </select>
     </div>
+    <div>
+        <label class="block">Visibility</label>
+        <select name="visibility"
+                class="border p-2 w-full rounded">
+            <option value="public"
+                    {{isSelected
+                    formData.visibility "public"
+                    }}>
+                Public</option>
+            <option value="members_only"
+                    {{isSelected
+                    formData.visibility "members_only"
+                    }}>Members Only</option>
+        </select>
+    </div>
 
     <button type="submit"
             class="border-2 cursor-pointer">Create Post</button>
