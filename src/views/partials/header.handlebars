@@ -1,3 +1,15 @@
-<header>
-  <h1>{{uppercase title}}</h1>
+<header class="h-12 shadow flex items-center px-4 xl:px-8 justify-between">
+  <h1 class="text-xl font-semibold">InnerCircles</h1>
+  <div>
+    {{#if user}}
+    <span>username: {{user.username}}</span>
+    <a href="/auth/logout"
+       class="underline">Logout</a>
+    {{else}}
+    <a href="/auth/login"
+       class="underline">Login</a>
+    <a href="/auth/signup"
+       class="underline">Signup</a>
+    {{/if}}
+  </div>
 </header>

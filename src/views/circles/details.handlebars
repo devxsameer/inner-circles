@@ -1,0 +1,17 @@
+{{#with circle}}
+<h1 class="text-xl">{{name}}</h1>
+<p>{{description}}</p>
+{{#ifEqual ../role "owner"}}
+<span>You Own This Circle</span>
+<a href="{{id}}/delete">Delete this circle</a>
+<br>
+<span>Circle Members:</span>
+<ul>
+  {{#each ../members}}
+  <li class="border-l-3 mb-2 pl-2">Username: {{this.username}} <br> Role: {{this.role}}</li>
+  {{/each}}
+</ul>
+{{else}}
+<span>Owner: {{ownerUsername}}</span>
+{{/ifEqual}}
+{{/with}}

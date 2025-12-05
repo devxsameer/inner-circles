@@ -2,7 +2,7 @@ import {
   createUserInDb,
   getUserByIdFromDb,
   getUserByUsernameFromDb,
-} from "../models/user.model.js";
+} from "../models/users.model.js";
 
 import { hashPassword } from "../utils/hash.js";
 
@@ -14,8 +14,9 @@ export const registerUser = async ({ username, password }) => {
 export const validateUser = async (username, password, verifyFn) => {
   const user = await getUserByUsernameFromDb(username);
   if (!user) return null;
+  console.log(user);
 
-  const ok = await verifyFn(password, user.password);
+  const ok = await verifyFn(password, user.passwordHash);
   return ok ? user : null;
 };
 

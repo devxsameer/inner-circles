@@ -1,17 +1,18 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0" />
   <title>{{title}}</title>
-  <link rel="stylesheet" href="/css/output.css" />
+  <link rel="stylesheet"
+        href="/css/output.css" />
 </head>
-<body>
-  <body
-    class="h-screen flex flex-col bg-neutral-200 font-outfit overflow-y-auto"
-  >
+
+<body class="min-h-screen flex flex-col bg-neutral-200 font-outfit overflow-y-auto">
   {{> header}}
-  <main>{{{body}}}</main>
-  </body>
+  <main class="p-4 xl:px-8 grow">{{{body}}}</main>
 </body>
+
 </html>

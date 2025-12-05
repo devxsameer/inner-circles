@@ -8,7 +8,6 @@ export function getSignup(req, res) {
 
 export async function postSignup(req, res, next) {
   const errors = validationResult(req);
-  console.log(errors);
 
   if (!errors.isEmpty()) {
     return res.render("signup", {

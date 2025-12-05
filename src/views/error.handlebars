@@ -1,5 +1,30 @@
-<div>
-  <h1>Oops! {{title}}</h1>
-  <p>{{message}}</p>
-  <a href="/">Go Home</a>
+<div class="shadow-md rounded-xl min-w-sm p-8 text-center max-w-lg mx-auto mt-8">
+  <h1 class="text-4xl font-bold">
+    {{code}}
+  </h1>
+  <h2 class="text-xl mb-4">Oops! {{title}}</h2>
+
+  <p class="text-md text-neutral-600 mb-6">
+    {{message}}
+  </p>
+
+  {{#if stack}}
+  <div>
+    <h2 class="text-sm text-neutral-500 mb-2">Stack Trace:</h2>
+    <pre class="bg-neutral-100 text-sm p-4 rounded-md overflow-auto text-left mb-4">{{stack}}</pre>
+  </div>
+  {{/if}}
+
+  {{#if url}}
+  <p class="text-sm text-neutral-500 mb-4">
+    Requested URL: <span class="font-mono">
+      {{url}}
+    </span>
+  </p>
+  {{/if}}
+
+  <a href="/"
+     class="inline-block mt-4 px-4 py-1.5 text-sm bg-neutral-900 text-neutral-100 rounded-md hover:bg-neutral-800 transition">
+    Go Home
+  </a>
 </div>

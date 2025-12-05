@@ -1,12 +1,27 @@
 {{{message}}}
-<div class="border p-4 m-4">
-  {{#if user}}
-    <ul>
-      <li>username: {{user.username}}</li>
-    </ul>
-    <a href="/auth/logout" class="underline">Logout</a>
-  {{else}}
-    <a href="/auth/login" class="underline">Login</a>
-    <a href="/auth/signup" class="underline">Signup</a>
-  {{/if}}
-</div>
+{{#if user}}
+<ul>
+   <li>username: {{user.username}}</li>
+</ul>
+<a href="/auth/logout"
+   class="underline">Logout</a>
+{{else}}
+<a href="/auth/login"
+   class="underline">Login</a>
+<a href="/auth/signup"
+   class="underline">Signup</a>
+{{/if}}
+<a href="/circles">Go to Circles</a>
+
+<ol class="flex flex-col gap-4 py-4">
+   {{#each posts}}
+   <li class="shadow-md p-2">
+      <ul>
+         <li>Title: {{this.title}} </li>
+         <li>Body: {{this.body}}</li>
+         <li>Author: {{this.authorUsername}}</li>
+         <li>Circle Name: {{this.circleName }}</li>
+      </ul>
+   </li>
+   {{/each}}
+</ol>

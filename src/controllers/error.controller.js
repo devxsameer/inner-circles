@@ -4,10 +4,12 @@
 const sendErrorDev = (err, res) => {
   console.error("ERROR 💥:", err);
 
-  return res.status(err.statusCode).render("error_dev", {
+  return res.status(err.statusCode).render("error", {
     title: "Something went wrong!",
-    message: err.message,
-    stack: err.stack,
+    code: err.statusCode,
+    message: err.message || "Please try again later.",
+    // stack: err.stack,
+    url: err.url,
   });
 };
 
@@ -17,14 +19,18 @@ const sendErrorProd = (err, res) => {
     return res.status(err.statusCode).render("error", {
       // Use 'error.ejs'
       title: "Something went wrong!",
+      code: err.statusCode,
       message: err.message,
+      url: err.url,
     });
   }
 
   console.error("ERROR 💥:", err);
   return res.status(err.statusCode).render("error", {
     title: "Something went wrong!",
+    code: err.statusCode,
     message: "Please try again later.",
+    url: err.url,
   });
 };
 
