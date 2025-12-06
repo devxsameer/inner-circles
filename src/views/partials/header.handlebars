@@ -1,15 +1,43 @@
-<header class="h-12 shadow flex items-center px-4 xl:px-8 justify-between">
-  <h1 class="text-xl font-semibold">InnerCircles</h1>
-  <div>
-    {{#if user}}
-    <span>username: {{user.username}}</span>
-    <a href="/auth/logout"
-       class="underline">Logout</a>
-    {{else}}
-    <a href="/auth/login"
-       class="underline">Login</a>
-    <a href="/auth/signup"
-       class="underline">Signup</a>
-    {{/if}}
-  </div>
+<header class="h-12 shadow flex items-center py-2 px-4 xl:px-8 justify-between sticky top-0 z-50 bg-white">
+   <h1 class="text-xl font-semibold"><a href="/">InnerCircles</a></h1>
+   <ul class="flex gap-4 text-neutral-800">
+      <li><a href="/">Home</a></li>
+      <li><a href="/circles">Circles</a></li>
+      <li><a href="/posts">Posts</a></li>
+   </ul>
+   {{#if user}}
+   <div class="relative"
+        id="userMenuWrapper">
+      <!-- Trigger -->
+      <button id="userMenuBtn"
+              class="flex items-center gap-1 py-1 px-2 rounded-md hover:bg-neutral-100 transition cursor-pointer">
+         <div class="flex flex-col text-right">
+            <span class="font-medium text-sm/4">{{user.username}}</span>
+            <span class="text-xs/3 text-neutral-500">User</span>
+         </div>
+
+         <img class="w-8 h-8 rounded-full object-cover border"
+              src="/images/profile.png"
+              alt="profile">
+      </button>
+
+      <!-- Dropdown -->
+      <div id="userDropdown"
+           class="absolute right-0 mt-2 bg-white shadow-lg rounded-md py-1.5 hidden">
+         <a href="/auth/logout"
+            class="gap-1 text-sm py-1 px-2  hover:bg-neutral-100 transition flex items-center">
+            {{> icons/logout}}
+            Logout
+         </a>
+      </div>
+   </div>
+
+
+   {{else}}
+   <div class="flex">
+      <a href="/auth/login"
+         class="gap-1 flex items-center rounded text-sm py-1 px-2 hover:bg-neutral-100 transition">{{>
+         icons/login}}Login</a>
+   </div>
+   {{/if}}
 </header>

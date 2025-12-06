@@ -10,9 +10,11 @@
         href="/css/output.css" />
 </head>
 
-<body class="min-h-screen flex flex-col bg-neutral-200 font-outfit overflow-y-auto">
+<body class="min-h-screen flex flex-col bg-white font-outfit overflow-y-auto">
   {{> header}}
-  <main class="p-4 xl:px-8 grow">{{{body}}}</main>
+  {{{body}}}
+  {{> footer}}
 </body>
+<script src="/js/main.js"></script>
 
 </html>

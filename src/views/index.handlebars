@@ -1,27 +1,112 @@
-{{{message}}}
-{{#if user}}
-<ul>
-   <li>username: {{user.username}}</li>
-</ul>
-<a href="/auth/logout"
-   class="underline">Logout</a>
-{{else}}
-<a href="/auth/login"
-   class="underline">Login</a>
-<a href="/auth/signup"
-   class="underline">Signup</a>
-{{/if}}
-<a href="/circles">Go to Circles</a>
+<section class="max-w-6xl mx-auto px-4 py-16 text-center">
+   <h1 class="text-4xl font-extrabold text-gray-900 mb-4">
+      Welcome to <span class="text-rose-600">InnerCircles</span>
+   </h1>
+   <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+      Create circles. Share ideas. See the real people behind posts —
+      only within your circles.
+   </p>
 
-<ol class="flex flex-col gap-4 py-4">
-   {{#each posts}}
-   <li class="shadow-md p-2">
-      <ul>
-         <li>Title: {{this.title}} </li>
-         <li>Body: {{this.body}}</li>
-         <li>Author: {{this.authorUsername}}</li>
-         <li>Circle Name: {{this.circleName }}</li>
-      </ul>
-   </li>
-   {{/each}}
-</ol>
+   <div class="mt-8 flex justify-center gap-4">
+      <a href="/signup"
+         class="btn-lg hover:bg-neutral-900">
+         Create Account
+      </a>
+      <a href="/circles"
+         class="btn-lg bg-neutral-100 border-neutral-950 text-neutral-950 hover:bg-neutral-200">
+         Explore Circles
+      </a>
+   </div>
+</section>
+
+<!-- ================= PUBLIC POSTS FEED ================= -->
+<section class="bg-gray-50 py-14 border-t border-b">
+   <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl font-bold mb-6">Latest Public Posts</h2>
+
+      <div class="grid md:grid-cols-2 gap-6">
+         {{#each publicPosts}}
+         <div class="bg-white p-5 rounded-xl shadow-sm border hover:shadow-md transition">
+            <h3 class="font-semibold text-lg">
+               {{this.title}}
+            </h3>
+
+            <p class="text-gray-600 mt-2 line-clamp-2">
+               {{this.body}}
+            </p>
+
+            <div class="mt-4 flex justify-between text-sm text-gray-500">
+               <span>Circle: {{this.circleName}}</span>
+               <span>By: Anonymous</span>
+            </div>
+
+            <a href="/posts/={{this.id}}"
+               class="text-rose-600 mt-3 inline-block hover:underline">
+               Read more →
+            </a>
+         </div>
+         {{/each}}
+      </div>
+   </div>
+</section>
+
+
+<!-- ================= POPULAR CIRCLES ================= -->
+<section class="max-w-6xl mx-auto px-4 py-14">
+   <h2 class="text-2xl font-bold mb-6">Popular Circles</h2>
+
+   <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {{#each circles}}
+      <div class="bg-white p-5 border rounded-xl shadow-sm hover:shadow-md transition">
+         <h3 class="font-semibold text-lg text-indigo-600">
+            {{this.name}}
+         </h3>
+         <p class="text-gray-600 text-sm mt-2">
+            {{this.description}}
+         </p>
+
+         <div class="flex justify-between items-center mt-4 text-sm text-gray-500">
+            <span>Members: {{this.memberCount}}</span>
+            <span>Owner: {{this.ownerUsername}}</span>
+         </div>
+
+         <a href="/circles/{{this.id}}"
+            class="mt-4 inline-block text-indigo-600 hover:underline">
+            View Circle →
+         </a>
+      </div>
+      {{/each}}
+   </div>
+</section>
+
+<!-- ================= WHY JOIN SECTION ================= -->
+<section class="py-16 ">
+   <div class="max-w-6xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-center mb-10">Why Join InnerCircles?</h2>
+
+      <div class="grid md:grid-cols-3 gap-8">
+
+         <div class="bg-white p-6 rounded-xl shadow-sm">
+            <h3 class="font-semibold text-xl">🔒 Controlled Privacy</h3>
+            <p class="text-gray-600 mt-2">
+               Your identity is only visible inside the circles you join.
+            </p>
+         </div>
+
+         <div class="bg-white p-6 rounded-xl shadow-sm">
+            <h3 class="font-semibold text-xl">🏛 Create Your Own Circles</h3>
+            <p class="text-gray-600 mt-2">
+               Build communities instantly and manage members easily.
+            </p>
+         </div>
+
+         <div class="bg-white p-6 rounded-xl shadow-sm">
+            <h3 class="font-semibold text-xl">📝 Real Conversations</h3>
+            <p class="text-gray-600 mt-2">
+               Post publicly or members-only. Your circles, your rules.
+            </p>
+         </div>
+
+      </div>
+   </div>
+</section>

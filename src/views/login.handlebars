@@ -1,37 +1,41 @@
-<h1 class="text-2xl">Log In</h1>
+<div class="max-w-6xl mx-auto flex items-center flex-col justify-center">
+  <div class="max-w-xs">
 
-{{#if errors}}
-{{#if errors.length}}
-<ul class="mb-4 text-red-600">
+    <h1 class="text-xl font-semibold"><span class="text-3xl block">&#128075;</span> Welcome Back</h1>
 
-  {{#each errors}}
-  <li>{{this.msg}}</li>
-  {{/each}}
+    {{#if errors}}
+    {{#if errors.length}}
+    <ul class="mb-4 text-red-600">
 
-</ul>
-{{/if}}
-{{/if}}
+      {{#each errors}}
+      <li>{{this.msg}}</li>
+      {{/each}}
 
-<form action=""
-      method="POST"
-      class="flex flex-col gap-2 items-start">
-  <label for="username">
-    Username:
-    <input type="text"
-           name="username"
-           id="username"
-           class="border p-2 w-full rounded" />
-  </label>
-  <label for="password">
-    Password:
-    <input type="password"
-           name="password"
-           id="password"
-           class="border p-2 w-full rounded" />
-  </label>
-  <button type="submit"
-          class="border-2 cursor-pointer">Log In</button>
-</form>
-<br />
-<a href="/auth/signup"
-   class="underline">Sign Up</a>
+    </ul>
+    {{/if}}
+    {{/if}}
+
+    <form action=""
+          method="POST"
+          class="flex flex-col gap-2">
+      <label for="username">
+        Username:
+        <input type="text"
+               name="username"
+               id="username"
+               class="border p-2 w-full rounded" />
+      </label>
+      <label for="password">
+        Password:
+        <input type="password"
+               name="password"
+               id="password"
+               class="border p-2 w-full rounded" />
+      </label>
+      <button type="submit"
+              class="border-2 bg-neutral-950 text-white px-3 rounded-lg cursor-pointer text-sm py-2">Log In</button>
+    </form>
+  </div>
+  <p class="text-neutral-600 text-sm py-12">First time here? <a href="/auth/signup"
+       class="text-black font-semibold">Create an account</a></p>
+</div>
