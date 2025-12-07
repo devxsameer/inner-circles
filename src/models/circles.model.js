@@ -66,6 +66,18 @@ export async function getAllCirclesFromDb() {
 
   return rows.map(mapCircle);
 }
+export async function getPopularCirclesFromDb(limit = 6) {
+  const { rows } = await pool.query(
+    `SELECT c.*, u.username AS owner_username
+     FROM circles c
+     JOIN users u ON u.id = c.owner_id
+     ORDER BY c.members_count DESC
+     LIMIT $1`,
+    [limit]
+  );
+
+  return rows.map(mapCircle);
+}
 
 export async function getCirclesOwnedByUserFromDb({ userId }) {
   const { rows } = await pool.query(

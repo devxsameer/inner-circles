@@ -1,35 +1,66 @@
-<h1 class="text-2xl">{{title}}</h1>
+<section class="container max-w-xl py-6">
 
-{{#if errors}}
-{{#if errors.length}}
-<ul class="mb-4 text-red-600">
+  {{!-- ================================
+  PAGE TITLE
+  ================================= --}}
+  <h1 class="text-3xl font-bold text-rose-600 mb-4">{{title}}</h1>
 
-  {{#each errors}}
-  <li>{{this.msg}}</li>
-  {{/each}}
+  {{!-- ================================
+  VALIDATION ERRORS
+  ================================= --}}
+  {{#if errors}}
+  {{#if errors.length}}
+  <ul class="mb-4 bg-red-50 border border-red-200 text-red-700 p-3 rounded">
+    {{#each errors}}
+    <li class="mb-1">• {{msg}}</li>
+    {{/each}}
+  </ul>
+  {{/if}}
+  {{/if}}
 
-</ul>
-{{/if}}
-{{/if}}
 
-<form action=""
-      method="POST"
-      class="flex flex-col gap-2 items-start">
-  <label for="name">
-    Name:
-    <input type="text"
-           name="name"
-           id="name"
-           class="border p-2 w-full rounded"
-           value="{{formData.name}}" />
-  </label>
-  <label for="description">
-    Description:
-    <textarea type="text"
-              name="description"
-              id="description"
-              class="border p-2 w-full rounded">{{formData.description}}</textarea>
-  </label>
-  <button type="submit"
-          class="border-2 cursor-pointer">Create</button>
-</form>
+  {{!-- ================================
+  FORM
+  ================================= --}}
+  <form method="POST"
+        action=""
+        class="bg-white p-6 rounded-lg shadow-md border space-y-4">
+
+    {{!-- Name Input --}}
+    <div>
+      <label for="name"
+             class="block font-semibold mb-1">
+        Circle Name
+      </label>
+      <input type="text"
+             name="name"
+             id="name"
+             value="{{formData.name}}"
+             required
+             class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-rose-400" />
+    </div>
+
+    {{!-- Description Input --}}
+    <div>
+      <label for="description"
+             class="block font-semibold mb-1">
+        Description
+      </label>
+      <textarea name="description"
+                id="description"
+                class="w-full border p-2 h-28 rounded resize-none focus:outline-none focus:ring-2 focus:ring-rose-400">{{formData.description}}</textarea>
+    </div>
+
+    {{!-- Submit Button --}}
+    <button type="submit"
+            class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-700 transition">
+      {{#if formData.id}}
+      Update Circle
+      {{else}}
+      Create Circle
+      {{/if}}
+    </button>
+
+  </form>
+
+</section>

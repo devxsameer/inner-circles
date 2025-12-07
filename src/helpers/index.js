@@ -12,5 +12,11 @@ const hbsHelpers = {
   isSelected: function (a, b) {
     return String(a) === String(b) ? "selected" : "";
   },
+  equals: function (a, b) {
+    return a === b;
+  },
+  or: function (a, b) {
+    return a || b;
+  },
 };
 export default hbsHelpers;

@@ -45,6 +45,7 @@ export async function createCirclePost(req, res, next) {
 export async function showCircle(req, res) {
   const page = parseInt(req.query.page) || 1;
   const role = req.membership?.role ?? null;
+  console.log(role);
   const { posts: circlePosts, pagination } = await getPostsByCircle({
     circleId: req.circle.id,
     role,
@@ -53,7 +54,7 @@ export async function showCircle(req, res) {
     limit: 6,
   });
 
-  if (role === "owner") {
+  if (role === "owner" || role === "admin" || role === "member") {
     const members = await getMembershipsInCircle(req.circle.id);
 
     return res.render("circles/details", {
@@ -70,6 +71,16 @@ export async function showCircle(req, res) {
     circlePosts,
     pagination,
     circle: req.circle,
+  });
+}
+
+export async function updateCircleGet(req, res) {
+  const members = await getMembershipsInCircle(req.circle.id);
+
+  res.render("circles/update", {
+    title: "Update" + req.circle.name,
+    circle: req.circle,
+    members,
   });
 }
 

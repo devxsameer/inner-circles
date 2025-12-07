@@ -10,6 +10,7 @@ import {
   getCirclesUserIsMemberOfFromDb,
   getMembershipFromDb,
   getMembershipsInCircleFromDb,
+  getPopularCirclesFromDb,
   insertOwnerAsMemberInDb,
   removeMemberFromDb,
 } from "../models/circles.model.js";
@@ -42,6 +43,10 @@ export async function getCirclesOwnedByUser(userId) {
 
 export async function getCirclesUserIsMemberOf(userId) {
   return await getCirclesUserIsMemberOfFromDb({ userId });
+}
+
+export async function getPopularCircles(limit = 6) {
+  return await getPopularCirclesFromDb(limit);
 }
 
 /* -------------------------------------------------------

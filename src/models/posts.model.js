@@ -102,6 +102,28 @@ export async function getPostsByCircleFromDb({
   return rows.map(mapPost);
 }
 
+export async function getLatestPublicPostsFromDb(limit = 6) {
+  const { rows } = await pool.query(
+    `SELECT p.id, p.title, p.body, 
+            c.name AS circle_name,
+            c.id   AS circle_id
+     FROM posts p
+     JOIN circles c ON c.id = p.circle_id
+     WHERE p.visibility = 'public'
+     ORDER BY p.created_at DESC
+     LIMIT $1`,
+    [limit]
+  );
+
+  return rows.map((row) => ({
+    id: row.id,
+    title: row.title,
+    body: row.body,
+    circleName: row.circle_name,
+    circleId: row.circle_id,
+  }));
+}
+
 /* -------------------------------------------------------
    GET POSTS OF A USER
 ------------------------------------------------------- */

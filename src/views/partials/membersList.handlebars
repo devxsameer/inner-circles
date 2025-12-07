@@ -1,0 +1,28 @@
+<h2 class="text-xl font-semibold mb-2">Circle Members</h2>
+
+{{#if members}}
+<ul class="space-y-2">
+    {{#each members}}
+    <li class="border-l-4 border-rose-400 pl-3 py-2 bg-gray-50 rounded">
+
+        <div class="flex items-center justify-between">
+
+            <strong>{{username}}</strong>
+
+            {{!-- Role Badges --}}
+            {{#ifEqual role "owner"}}
+            <span class="text-xs px-2 py-1 bg-yellow-200 text-yellow-800 rounded-full">Owner</span>
+            {{else ifEqual role "admin"}}
+            <span class="text-xs px-2 py-1 bg-blue-200 text-blue-800 rounded-full">Admin</span>
+            {{else}}
+            <span class="text-xs px-2 py-1 bg-gray-200 text-gray-700 rounded-full">Member</span>
+            {{/ifEqual}}
+
+        </div>
+
+    </li>
+    {{/each}}
+</ul>
+{{else}}
+<p class="text-gray-500">No members yet.</p>
+{{/if}}

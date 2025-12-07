@@ -16,6 +16,12 @@ export const canDeletePost = (req, post) => {
   return post.authorId === req.user.id;
 };
 
-export const canManageMembers = (req) => {
+export const canDeleteCircle = (req) => {
   return !!req.membership && req.membership.role === "owner";
+};
+export const canManageMembers = (req) => {
+  return (
+    (!!req.membership && req.membership.role === "owner") ||
+    req.membership.role === "admin"
+  );
 };

@@ -10,6 +10,7 @@ import {
   countPostsByCircleFromDb,
   countPostsByAuthorFromDb,
   countAllPostsFromDb,
+  getLatestPublicPostsFromDb,
 } from "../models/posts.model.js";
 import { getPagination } from "../utils/pagination.js";
 
@@ -24,6 +25,10 @@ export async function createPost({
   visibility,
 }) {
   return await createPostInDb({ circleId, authorId, title, body, visibility });
+}
+
+export async function getLatestPublicPosts(limit = 6) {
+  return await getLatestPublicPostsFromDb(limit);
 }
 
 /* -------------------------------------------------------
