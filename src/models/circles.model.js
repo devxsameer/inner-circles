@@ -10,6 +10,7 @@ function mapCircle(row) {
     description: row.description,
     ownerId: row.owner_id,
     createdAt: row.created_at,
+    membersCount: row.members_count,
     ownerUsername: row.owner_username || null,
   };
 }

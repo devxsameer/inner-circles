@@ -38,12 +38,47 @@ export async function createPostInDb({
 }
 
 /* -------------------------------------------------------
+   COUNT POSTS
+------------------------------------------------------- */
+
+export async function countPostsByCircleFromDb({ circleId, visibilityList }) {
+  const { rows } = await pool.query(
+    `SELECT COUNT(*) AS total
+     FROM posts
+     WHERE circle_id = $1
+       AND visibility = ANY($2)`,
+    [circleId, visibilityList]
+  );
+
+  return Number(rows[0].total);
+}
+
+export async function countAllPostsFromDb() {
+  const { rows } = await pool.query(`SELECT COUNT(*) AS total FROM posts`);
+
+  return Number(rows[0].total);
+}
+
+export async function countPostsByAuthorFromDb({ userId }) {
+  const { rows } = await pool.query(
+    `SELECT COUNT(*) AS total
+     FROM posts
+     WHERE author_id = $1`,
+    [userId]
+  );
+
+  return Number(rows[0].total);
+}
+
+/* -------------------------------------------------------
    GET POSTS FOR A CIRCLE
 ------------------------------------------------------- */
 export async function getPostsByCircleFromDb({
   circleId,
   viewerId,
   visibilityList,
+  limit,
+  offset,
 }) {
   const { rows } = await pool.query(
     `SELECT p.*,
@@ -59,24 +94,26 @@ export async function getPostsByCircleFromDb({
        ON cm.circle_id = p.circle_id
       AND cm.user_id = $2
      WHERE p.circle_id = $1 AND p.visibility = ANY($3)
-     ORDER BY p.created_at DESC`,
-    [circleId, viewerId, visibilityList]
+     ORDER BY p.created_at DESC
+     LIMIT $4 OFFSET $5`,
+    [circleId, viewerId, visibilityList, limit, offset]
   );
 
   return rows.map(mapPost);
 }
+
 /* -------------------------------------------------------
    GET POSTS OF A USER
 ------------------------------------------------------- */
-export async function getPostsByAuthorFromDb({ userId }) {
+export async function getPostsByAuthorFromDb({ userId, limit, offset }) {
   const { rows } = await pool.query(
     `SELECT p.*,
             c.name AS circle_name
      FROM posts p
      JOIN circles c ON c.id = p.circle_id
      WHERE p.author_id = $1
-     ORDER BY p.created_at DESC`,
-    [userId]
+     ORDER BY p.created_at DESC LIMIT $2 OFFSET $3`,
+    [userId, limit, offset]
   );
 
   return rows.map(mapPost);
@@ -115,25 +152,23 @@ export async function deletePostFromDb({ postId }) {
 /* -------------------------------------------------------
    GET ALL POSTS (OPTIONAL viewerId)
 ------------------------------------------------------- */
-export async function getAllPostsFromDb({ viewerId = null }) {
+export async function getAllPostsFromDb({ viewerId = null, limit, offset }) {
   const { rows } = await pool.query(
     `SELECT
         p.*,
-        CASE
-            WHEN cm.user_id IS NOT NULL THEN u.username
-            ELSE NULL
-        END AS author_username,
+        CASE WHEN cm.user_id IS NOT NULL THEN u.username ELSE NULL END AS author_username,
         c.name AS circle_name,
         c.id AS circle_id,
         (cm.user_id IS NOT NULL) AS viewer_is_member
-    FROM posts p
-    JOIN users u ON u.id = p.author_id
-    JOIN circles c ON c.id = p.circle_id
-    LEFT JOIN circle_members cm
+     FROM posts p
+     JOIN users u ON u.id = p.author_id
+     JOIN circles c ON c.id = p.circle_id
+     LEFT JOIN circle_members cm
         ON cm.circle_id = p.circle_id
-        AND cm.user_id = $1
-    ORDER BY p.created_at DESC;`,
-    [viewerId]
+       AND cm.user_id = $1
+     ORDER BY p.created_at DESC
+     LIMIT $2 OFFSET $3`,
+    [viewerId, limit, offset]
   );
 
   return rows.map(mapPost);

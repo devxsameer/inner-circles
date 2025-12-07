@@ -1,30 +1,143 @@
-{{#with circle}}
-<h1 class="text-xl">{{name}}</h1>
-<p>{{description}}</p>
-{{#ifEqual ../role "owner"}}
-<span>You Own This Circle</span>
-<a href="{{id}}/delete">Delete this circle</a>
-<br>
-<span>Circle Members:</span>
-<ul>
-  {{#each ../members}}
-  <li class="border-l-3 mb-2 pl-2">Username: {{this.username}} <br> Role: {{this.role}}</li>
-  {{/each}}
-</ul>
-{{else}}
-<span>Owner: {{ownerUsername}}</span>
-{{/ifEqual}}
-{{/with}}
+{{!-- ================================
+CIRCLE HEADER
+================================ --}}
+<section class="container py-4">
 
-<ol class="flex flex-col gap-4 py-4">
-  {{#each circlePosts}}
-  <li class="shadow-md p-2">
-    <ul>
-      <li>Title: {{this.title}} </li>
-      <li>Body: {{this.body}}</li>
-      <li>Author: {{this.authorUsername}}</li>
-    </ul>
-    <a href="/posts/{{this.id}}/delete">Delete Post</a>
-  </li>
-  {{/each}}
-</ol>
+  {{#with circle}}
+  <h1 class="text-3xl font-bold text-rose-600 mb-1">{{name}}</h1>
+
+  <p class="text-gray-600 mb-4">
+    {{#if description}}{{description}}{{else}}<em>No description provided.</em>{{/if}}
+  </p>
+
+  {{!-- If viewer is the owner --}}
+  {{#ifEqual ../role "owner"}}
+
+  <span class="inline-block px-3 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded-full">
+    You Own This Circle
+  </span>
+
+  <div class="mt-3">
+    <a href="/circles/{{id}}/delete"
+       class="text-red-600 hover:underline">
+      Delete This Circle
+    </a>
+  </div>
+
+  <hr class="my-4">
+
+  {{!-- ===============================
+  MEMBERS LIST WITH ROLE BADGES
+  =============================== --}}
+  <h2 class="text-xl font-semibold mb-2">Circle Members</h2>
+
+  {{#if ../members}}
+  <ul class="space-y-2">
+    {{#each ../members}}
+    <li class="border-l-4 border-rose-400 pl-3 py-2 bg-gray-50 rounded">
+
+      <div class="flex items-center justify-between">
+
+        <strong>{{username}}</strong>
+
+        {{!-- Role badge --}}
+        {{#ifEqual role "owner"}}
+        <span class="text-xs px-2 py-1 bg-yellow-200 text-yellow-800 rounded-full">Owner</span>
+        {{else ifEqual role "admin"}}
+        <span class="text-xs px-2 py-1 bg-blue-200 text-blue-800 rounded-full">Admin</span>
+        {{else}}
+        <span class="text-xs px-2 py-1 bg-gray-200 text-gray-700 rounded-full">Member</span>
+        {{/ifEqual}}
+
+      </div>
+
+    </li>
+    {{/each}}
+  </ul>
+
+  {{else}}
+  <p class="text-gray-500">No members yet.</p>
+  {{/if}}
+
+  {{else}}
+  {{!-- Viewer is NOT the owner --}}
+  <p class="text-gray-700 text-sm">
+    <span class="font-semibold">Owner:</span> {{ownerUsername}}
+  </p>
+  {{/ifEqual}}
+
+  {{/with}}
+
+</section>
+
+
+
+{{!-- ================================
+POSTS SECTION
+================================ --}}
+<section class="container py-4">
+  <h2 class="text-2xl font-semibold mb-4">Posts</h2>
+
+  {{#if circlePosts}}
+
+  <ol class="grid  gap-4">
+    {{#each circlePosts}}
+    <li class="shadow-md p-4 bg-white border rounded-lg hover:shadow-lg transition">
+
+      <h3 class="font-semibold text-lg text-indigo-600">{{title}}</h3>
+
+      <p class="text-gray-700 mt-2 mb-3">{{body}}</p>
+
+      <p class="text-sm text-gray-600">
+        <strong>Author:</strong> {{authorUsername}}
+      </p>
+
+      <div class="mt-3">
+        <a href="/posts/{{id}}/delete"
+           class="text-red-600 text-sm hover:underline">
+          Delete Post
+        </a>
+      </div>
+
+    </li>
+    {{/each}}
+  </ol>
+
+  {{!-- ================================
+  PAGINATION
+  ================================= --}}
+  <div class="flex items-center justify-center mt-6 gap-3">
+
+    {{#if pagination.hasPrev}}
+    <a href="?page={{pagination.prevPage}}"
+       class="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200">
+      ← Prev
+    </a>
+    {{else}}
+    <span class="px-3 py-1 border rounded bg-gray-50 text-gray-400 cursor-not-allowed">
+      ← Prev
+    </span>
+    {{/if}}
+
+    <span class="px-4 py-1 font-semibold">
+      Page {{pagination.currentPage}} of {{pagination.totalPages}}
+    </span>
+
+    {{#if pagination.hasNext}}
+    <a href="?page={{pagination.nextPage}}"
+       class="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200">
+      Next →
+    </a>
+    {{else}}
+    <span class="px-3 py-1 border rounded bg-gray-50 text-gray-400 cursor-not-allowed">
+      Next →
+    </span>
+    {{/if}}
+
+  </div>
+
+  {{else}}
+  <p class="text-gray-500">This circle has no posts yet.</p>
+  {{/if}}
+
+</section>

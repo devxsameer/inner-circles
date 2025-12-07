@@ -1,0 +1,148 @@
+<section class="container py-6 max-w-3xl">
+
+    {{!-- ================================
+    HEADER SECTION
+    ================================= --}}
+    <h1 class="text-3xl font-bold mb-1 text-rose-600">Update Circle</h1>
+    <p class="text-gray-600 mb-6">{{circle.name}}</p>
+
+
+    {{!-- ================================
+    UPDATE CIRCLE FORM
+    ================================= --}}
+    <form action="/circles/{{circle.id}}/update"
+          method="POST"
+          class="bg-white p-5 border rounded-lg shadow-md space-y-4">
+
+        <div>
+            <label class="font-semibold block mb-1">Circle Name</label>
+            <input type="text"
+                   name="name"
+                   value="{{circle.name}}"
+                   class="w-full border p-2 rounded"
+                   required>
+        </div>
+
+        <div>
+            <label class="font-semibold block mb-1">Description</label>
+            <textarea name="description"
+                      class="w-full border p-2 rounded h-24">{{circle.description}}</textarea>
+        </div>
+
+        <button class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+            Update Circle
+        </button>
+    </form>
+
+
+    {{!-- ================================
+    MEMBER MANAGEMENT
+    ================================= --}}
+    <section class="mt-10">
+        <h2 class="text-xl font-semibold mb-3">Manage Members</h2>
+
+        {{!-- Add new member --}}
+        {{#if availableUsers}}
+        <form action="/circles/{{circle.id}}/members/add"
+              method="POST"
+              class="flex gap-2 items-center mb-6">
+
+            <select name="userId"
+                    class="border p-2 rounded w-full">
+                {{#each availableUsers}}
+                <option value="{{id}}">{{username}}</option>
+                {{/each}}
+            </select>
+
+            <button class="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                Add Member
+            </button>
+        </form>
+        {{/if}}
+
+
+        {{!-- Member List --}}
+        <ul class="space-y-3">
+            {{#each members}}
+            <li class="bg-gray-50 border rounded p-4 flex flex-col gap-2">
+
+                <div class="flex justify-between items-center">
+                    <strong>{{username}}</strong>
+
+                    {{!-- Role Badge --}}
+                    {{#ifEqual role "owner"}}
+                    <span class="px-2 py-1 text-xs bg-yellow-200 text-yellow-800 rounded-full">Owner</span>
+                    {{else ifEqual role "admin"}}
+                    <span class="px-2 py-1 text-xs bg-blue-200 text-blue-800 rounded-full">Admin</span>
+                    {{else}}
+                    <span class="px-2 py-1 text-xs bg-gray-200 text-gray-700 rounded-full">Member</span>
+                    {{/ifEqual}}
+                </div>
+
+                <div class="flex flex-wrap gap-3 mt-2">
+
+                    {{!-- OWNER: full control --}}
+                    {{#ifEqual ../role "owner"}}
+
+                    {{!-- Cannot modify yourself --}}
+                    {{#unless (equals ../circle.ownerId id)}}
+
+                    {{!-- Promote / Demote --}}
+                    {{#ifEqual role "admin"}}
+                    <a href="/circles/{{../circle.id}}/members/{{id}}/role/member"
+                       class="text-sm text-indigo-600 hover:underline">Demote to Member</a>
+                    {{else}}
+                    <a href="/circles/{{../circle.id}}/members/{{id}}/role/admin"
+                       class="text-sm text-indigo-600 hover:underline">Promote to Admin</a>
+                    {{/ifEqual}}
+
+                    {{!-- Remove member --}}
+                    <a href="/circles/{{../circle.id}}/members/{{id}}/remove"
+                       class="text-sm text-red-600 hover:underline">Remove</a>
+
+                    {{/unless}}
+
+                    {{!-- ADMIN: limited control --}}
+                    {{else ifEqual ../role "admin"}}
+
+                    {{!-- Admin cannot modify owner --}}
+                    {{#unless (equals ../circle.ownerId id)}}
+
+                    {{!-- Admin can promote/demote only members --}}
+                    {{#ifEqual role "member"}}
+                    <a href="/circles/{{../circle.id}}/members/{{id}}/role/admin"
+                       class="text-sm text-indigo-600 hover:underline">Promote to Admin</a>
+                    {{/ifEqual}}
+
+                    {{!-- Admin can remove members except owner --}}
+                    <a href="/circles/{{../circle.id}}/members/{{id}}/remove"
+                       class="text-sm text-red-600 hover:underline">Remove</a>
+
+                    {{/unless}}
+
+                    {{/ifEqual}}
+
+                </div>
+
+            </li>
+            {{/each}}
+        </ul>
+    </section>
+
+
+
+    {{!-- ================================
+    DELETE CIRCLE (OWNER ONLY)
+    ================================= --}}
+    {{#ifEqual role "owner"}}
+    <section class="mt-10">
+        <h2 class="text-xl font-semibold mb-3 text-red-700">Danger Zone</h2>
+
+        <a href="/circles/{{circle.id}}/delete"
+           class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+            Delete This Circle
+        </a>
+    </section>
+    {{/ifEqual}}
+
+</section>

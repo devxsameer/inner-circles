@@ -15,4 +15,7 @@
   .btn-lg {
     @apply text-sm bg-neutral-950 px-4 py-2 rounded shadow text-white cursor-pointer;
   }
+  .container {
+    @apply px-4 xl:px-8 py-2;
+  }
 }

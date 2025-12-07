@@ -1,36 +1,66 @@
-{{#if user}}
-<h1 class="text-2xl">My Circles</h1>
+<section class="container">
+  <h1 class="text-2xl">My Circles</h1>
 
-<ol class="flex flex-col gap-4 py-2">
-  {{#if ownedCircles.length}}
-  {{#each ownedCircles}}
-  <li class="shadow-md p-2">
-    <ul>
-      <li>Name: {{this.name}} </li>
-      <li>Description: {{this.description}}</li>
-    </ul>
-    <a href="/circles/{{this.id}}">View Circle</a>
-  </li>
-  {{/each}}
+  <div class="flex flex-col gap-4 py-2">
+    {{#if user}}
+
+    {{#if ownedCircles}}
+    {{#each ownedCircles}}
+    <div class="bg-white p-5 rounded-lg shadow-md border hover:shadow-lg border-neutral-200 transition">
+      <h3 class="font-semibold text-lg text-rose-600">{{name}}</h3>
+
+      <p class="text-gray-600 text-sm mt-2">{{description}}</p>
+
+      <div class="flex justify-between items-center mt-4 text-sm text-gray-500">
+        <span>Members: {{membersCount}}</span>
+      </div>
+
+      <a href="/circles/{{id}}"
+         class="mt-4 inline-block text-indigo-600 hover:underline">
+        View Circle →
+      </a>
+    </div>
+    {{/each}}
+    {{else}}
+    <p>You currently own no circles.
+      <a href="/circles/create"
+         class="underline">Create One</a>
+    </p>
+    {{/if}}
+
+    {{else}}
+    <p>Sign Up to Create your Own Circles</p>
+    {{/if}}
+  </div>
+</section>
+
+
+<section class="container">
+  <h1 class="text-2xl my-2">{{title}}</h1>
+
+  {{#if circles}}
+  <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+    {{#each circles}}
+    <div class="bg-white p-5 rounded-lg shadow-md border hover:shadow-lg border-neutral-200 transition">
+
+      <h3 class="font-semibold text-lg text-rose-600">{{name}}</h3>
+
+      <p class="text-gray-600 text-sm mt-2">{{description}}</p>
+
+      <div class="flex justify-between items-center mt-4 text-sm text-gray-500">
+        <span>Members: {{membersCount}}</span>
+        <span>Owner: {{ownerUsername}}</span>
+      </div>
+
+      <a href="/circles/{{id}}"
+         class="mt-4 inline-block text-indigo-600 hover:underline">
+        View Circle →
+      </a>
+
+    </div>
+    {{/each}}
+  </div>
   {{else}}
-  <p>You currently own no circle. <a href="/circles/create"
-       class="underline">Create One</a> </p>
+  <p>No circles found.</p>
   {{/if}}
-
-</ol>
-{{/if}}
-
-<h1 class="text-2xl">{{title}}</h1>
-
-<ol class="flex flex-col gap-4 py-2">
-  {{#each circles}}
-  <li class="shadow-md p-2">
-    <ul>
-      <li>Name: {{this.name}} </li>
-      <li>Description: {{this.description}}</li>
-      <li>Owner: {{this.ownerUsername}}</li>
-    </ul>
-    <a href="/circles/{{this.id}}">View Circle</a>
-  </li>
-  {{/each}}
-</ol>
+</section>

@@ -9,7 +9,7 @@ indexRoutes.get("/", async (req, res) => {
   const viewerId = req.user ? req.user.id : null;
   const posts = await getAllPosts(viewerId);
 
-  res.render("index", { title: "InnerCircles", posts });
+  res.render("index", { title: "InnerCircles", publicPosts: posts });
 });
 
 export default indexRoutes;

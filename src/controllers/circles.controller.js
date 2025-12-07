@@ -43,11 +43,14 @@ export async function createCirclePost(req, res, next) {
    GET: Show single circle
 ------------------------------------------------------- */
 export async function showCircle(req, res) {
+  const page = parseInt(req.query.page) || 1;
   const role = req.membership?.role ?? null;
-  const circlePosts = await getPostsByCircle({
+  const { posts: circlePosts, pagination } = await getPostsByCircle({
     circleId: req.circle.id,
     role,
     viewerId: req.user?.id ?? null,
+    page,
+    limit: 6,
   });
 
   if (role === "owner") {
@@ -57,6 +60,7 @@ export async function showCircle(req, res) {
       title: req.circle.name,
       circle: req.circle,
       circlePosts,
+      pagination,
       members,
     });
   }
@@ -64,6 +68,7 @@ export async function showCircle(req, res) {
   res.render("circles/details", {
     title: req.circle.name,
     circlePosts,
+    pagination,
     circle: req.circle,
   });
 }
