@@ -78,7 +78,7 @@ export async function getPostsByCircle({
 /* -------------------------------------------------------
    GET ALL POSTS OF A Author
 ------------------------------------------------------- */
-export async function getPostsByAuthor(userId, page = 1, limit = 10) {
+export async function getPostsByAuthor({ userId, page = 1, limit = 10 }) {
   const { limit: l, offset } = getPagination({ page, limit });
 
   const posts = await getPostsByAuthorFromDb({
@@ -97,6 +97,8 @@ export async function getPostsByAuthor(userId, page = 1, limit = 10) {
       totalPages,
       hasPrev: page > 1,
       hasNext: page < totalPages,
+      prevPage: page > 1 ? page - 1 : null,
+      nextPage: page < totalPages ? page + 1 : null,
     },
   };
 }
@@ -118,7 +120,7 @@ export async function deletePost(postId) {
 /* -------------------------------------------------------
    GET ALL POSTS (optionally include viewerId)
 ------------------------------------------------------- */
-export async function getAllPosts(viewerId = null, page = 1, limit = 10) {
+export async function getAllPosts({ viewerId = null, page = 1, limit = 10 }) {
   const { limit: l, offset } = getPagination({ page, limit });
 
   const posts = await getAllPostsFromDb({
@@ -137,6 +139,8 @@ export async function getAllPosts(viewerId = null, page = 1, limit = 10) {
       totalPages,
       hasPrev: page > 1,
       hasNext: page < totalPages,
+      prevPage: page > 1 ? page - 1 : null,
+      nextPage: page < totalPages ? page + 1 : null,
     },
   };
 }

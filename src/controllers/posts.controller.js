@@ -4,6 +4,7 @@ import { matchedData, validationResult } from "express-validator";
 import {
   createPost,
   deletePost,
+  getAllPosts,
   getPostsByAuthor, // this must exist in your service
 } from "../services/posts.service.js";
 
@@ -14,12 +15,27 @@ import AppError from "../utils/appError.js";
 /* -------------------------------------------------------
    GET: User's Posts
 ------------------------------------------------------- */
-export async function getUserPosts(req, res) {
-  const userId = req.user?.id ?? null;
+export async function getPosts(req, res) {
+  const userId = req?.user?.id ?? null;
+  const ownedPostsPage = parseInt(req.query.ownedPostsPage) || 1;
+  const allPostsPage = parseInt(req.query.allPostsPage) || 1;
+  console.log({ ownedPostsPage, allPostsPage });
 
-  const posts = await getPostsByAuthor(userId);
+  const [
+    { posts: allPosts, pagination: allPostsPagination },
+    { posts: ownedPosts, pagination: ownedPostsPagination },
+  ] = await Promise.all([
+    getAllPosts({ viewerId: userId, page: allPostsPage, limit: 9 }),
+    getPostsByAuthor({ userId, page: ownedPostsPage, limit: 6 }),
+  ]);
 
-  res.render("posts", { title: "My Posts", posts });
+  res.render("posts", {
+    title: "All Posts",
+    ownedPostsPagination,
+    allPosts,
+    ownedPosts,
+    allPostsPagination,
+  });
 }
 
 /* -------------------------------------------------------

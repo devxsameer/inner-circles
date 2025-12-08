@@ -7,7 +7,7 @@ import {
   createPostsGet,
   createPostsPost,
   deletePostController,
-  getUserPosts,
+  getPosts,
 } from "../controllers/posts.controller.js";
 import { postsValidator } from "../middlewares/validators/posts.validators.js";
 import {
@@ -20,7 +20,7 @@ import { requirePermission } from "../middlewares/permissions.middleware.js";
 
 const postsRoutes = Router();
 
-postsRoutes.get("/", ensureAuth, getUserPosts);
+postsRoutes.get("/", getPosts);
 postsRoutes
   .route("/create")
   .get(ensureAuth, createPostsGet)

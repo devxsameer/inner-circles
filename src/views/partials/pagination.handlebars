@@ -1,0 +1,36 @@
+{{!-- Pagination --}}
+<div class="mt-8 flex items-center justify-center ">
+    <div class="border flex rounded divide-x overflow-hidden border-neutral-300 shadow divide-neutral-300">
+
+
+        {{!-- Prev Button --}}
+        {{#if pagination.hasPrev}}
+        <a href="/posts?{{#if query}}{{query}}{{else}}page{{/if}}={{pagination.prevPage}}{{#if hash}}#{{hash}}{{/if}}"
+           class="px-4 py-2 bg-white hover:bg-gray-100 transition flex text-sm items-center gap-1">
+            {{> icons/backward}} Prev
+        </a>
+        {{else}}
+        <span class="px-4 py-2 bg-gray-100 text-gray-400 flex text-sm items-center gap-1">
+            {{> icons/backward}} Prev
+        </span>
+        {{/if}}
+
+        {{!-- Page Status --}}
+        <span class="px-5 py-2 text-sm bg-gray-50  font-medium shadow-sm">
+            Page {{pagination.currentPage}} of {{pagination.totalPages}}
+        </span>
+
+        {{!-- Next Button --}}
+        {{#if pagination.hasNext}}
+        <a href="/posts?{{#if query}}{{query}}{{else}}page{{/if}}={{pagination.nextPage}}{{#if hash}}#{{hash}}{{/if}}"
+           class="px-4 py-2 flex items-center text-sm bg-white hover:bg-gray-100 transition cursor-pointer gap-1">
+            Next {{> icons/forward}}
+        </a>
+        {{else}}
+        <span class="px-4 py-2 flex items-center text-sm bg-gray-100 text-gray-400 gap-1">
+            Next {{> icons/forward}}
+        </span>
+        {{/if}}
+
+    </div>
+</div>

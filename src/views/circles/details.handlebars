@@ -1,200 +1,151 @@
 {{!-- ================================
 CIRCLE HEADER
 ================================ --}}
-<section class="container">
+<section class="py-8">
+  <div class="wrapper">
 
-  {{#with circle}}
+    {{#with circle}}
 
-  <h1 class="text-3xl font-bold text-rose-600 mb-1">{{name}}</h1>
+    <h1 class="text-3xl font-bold text-rose-600 mb-1">{{name}}</h1>
 
-  <p class="text-gray-600 mb-4">
-    {{#if description}}{{description}}{{else}}<em>No description provided.</em>{{/if}}
-  </p>
+    <p class="text-gray-600 mb-4">
+      {{#if description}}{{description}}{{else}}<em>No description provided.</em>{{/if}}
+    </p>
 
-  {{!-- ============================
-  1. OWNER VIEW
-  ============================= --}}
-  {{#ifEqual ../role "owner"}}
-  <span class="inline-block px-3 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded-full">
-    You Own This Circle
-  </span>
+    {{!-- ============================
+    1. OWNER VIEW
+    ============================= --}}
+    {{#ifEqual ../role "owner"}}
+    <span class="inline-block px-3 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded-full">
+      You Own This Circle
+    </span>
 
-  <div class="mt-3">
-    <a href="/circles/{{id}}/delete"
-       class="text-red-600 hover:underline">
-      Delete This Circle
+    <div class="mt-3 flex justify-end">
+      <a href="/circles/{{id}}/delete"
+         class="btn bg-rose-600">
+        Delete This Circle
+      </a>
+    </div>
+
+    <hr class="my-4">
+    {{> membersList members=../members }}
+
+
+
+    {{!-- ============================
+    2. ADMIN VIEW
+    ============================= --}}
+    {{else ifEqual ../role "admin"}}
+    <span class="inline-block px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-700 rounded-full">
+      You are Admin of This Circle
+    </span>
+
+    <p class="text-gray-600 mt-2 text-sm">
+      You help manage this circle. Contact the owner for full privileges.
+    </p>
+
+    <hr class="my-4">
+    {{> membersList members=../members }}
+
+
+
+    {{!-- ============================
+    3. MEMBER VIEW
+    ============================= --}}
+    {{else ifEqual ../role "member"}}
+
+    <span class="inline-block px-3 py-1 text-xs font-semibold bg-gray-100 text-gray-700 rounded-full">
+      You are a Member
+    </span>
+
+    <p class="text-gray-600 mt-2 text-sm">
+      Enjoy posts and discussions with others!
+    </p>
+
+    <hr class="my-4">
+    {{> membersList members=../members }}
+
+
+
+    {{!-- ============================
+    4. NON-MEMBER (LOGGED-IN)
+    ============================= --}}
+    {{else if ../user}}
+
+    <span class="inline-block px-3 py-1 text-xs font-semibold bg-red-100 text-red-700 rounded-full">
+      You are not a member of this circle
+    </span>
+
+    <p class="text-gray-600 mt-3">
+      Join this circle to access member-only posts and discussions.
+    </p>
+
+    <a href="/circles/{{id}}/join"
+       class="btn inline-block mt-2 transition">
+      Join Circle
     </a>
+
+    <hr class="my-4 text-gray-400">
+
+    <p class="text-gray-700 text-sm">
+      <span class="font-semibold">Owner:</span> {{ownerUsername}}
+    </p>
+
+
+    {{!-- ============================
+    5. NOT LOGGED IN (guest)
+    ============================= --}}
+    {{else}}
+
+    <span class="inline-block px-3 py-1 text-xs font-semibold bg-gray-100 text-gray-600 rounded-lg">
+      You must log in to join the circle and view member-only posts.
+    </span>
+
+    <div class="mt-3 flex gap-3">
+      <a href="/auth/login"
+         class="btn">Login</a>
+
+      <a href="/auth/signup"
+         class="btn bg-neutral-50 text-neutral-950 hover:bg-neutral-100">Signup</a>
+    </div>
+
+    <hr class="my-4 text-gray-400">
+
+    <p class="text-gray-700 text-sm">
+      <span class="font-semibold">Owner:</span> {{ownerUsername}}
+    </p>
+
+    {{/ifEqual}}
+
+    {{/with}}
+
   </div>
-
-  <hr class="my-4">
-  {{> membersList members=../members }}
-
-
-
-  {{!-- ============================
-  2. ADMIN VIEW
-  ============================= --}}
-  {{else ifEqual ../role "admin"}}
-  <span class="inline-block px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-700 rounded-full">
-    You are Admin of This Circle
-  </span>
-
-  <p class="text-gray-600 mt-2">
-    You help manage this circle. Contact the owner for full privileges.
-  </p>
-
-  <hr class="my-4">
-  {{> membersList members=../members }}
-
-
-
-  {{!-- ============================
-  3. MEMBER VIEW
-  ============================= --}}
-  {{else ifEqual ../role "member"}}
-
-  <span class="inline-block px-3 py-1 text-xs font-semibold bg-gray-100 text-gray-700 rounded-full">
-    You are a Member
-  </span>
-
-  <p class="text-gray-600 mt-2">
-    Enjoy posts and discussions with others!
-  </p>
-
-  <hr class="my-4">
-  {{> membersList members=../members }}
-
-
-
-  {{!-- ============================
-  4. NON-MEMBER (LOGGED-IN)
-  ============================= --}}
-  {{else if ../user}}
-
-  <span class="inline-block px-3 py-1 text-xs font-semibold bg-red-100 text-red-700 rounded-full">
-    You are not a member of this circle
-  </span>
-
-  <p class="text-gray-600 mt-3">
-    Join this circle to access member-only posts and discussions.
-  </p>
-
-  <a href="/circles/{{id}}/join"
-     class="btn transition">
-    Join Circle
-  </a>
-
-  <hr class="my-4">
-
-  <p class="text-gray-700 text-sm mb-4">
-    <span class="font-semibold">Owner:</span> {{ownerUsername}}
-  </p>
-
-
-  {{!-- ============================
-  5. NOT LOGGED IN (guest)
-  ============================= --}}
-  {{else}}
-
-  <span class="inline-block px-3 py-1 text-xs font-semibold bg-gray-100 text-gray-600 rounded-lg">
-    You must log in to join the circle and view member-only posts.
-  </span>
-
-  <div class="mt-3 flex gap-3">
-    <a href="/auth/login"
-       class="btn">Login</a>
-
-    <a href="/auth/signup"
-       class="btn bg-neutral-50 text-neutral-950 hover:bg-neutral-100">Signup</a>
-  </div>
-
-  <hr class="my-4">
-
-  <p class="text-gray-700 text-sm mb-2">
-    <span class="font-semibold">Owner:</span> {{ownerUsername}}
-  </p>
-
-  {{/ifEqual}}
-
-  {{/with}}
-
 </section>
 
 
 {{!-- ================================
 POSTS SECTION
 ================================ --}}
-<section class="container">
-
-  <h2 class="text-2xl font-semibold mb-4">Posts</h2>
-
-  {{!-- NON-MEMBER CANNOT SEE THIS --}}
-  {{#ifEqual role "none"}}
-  <p class="text-gray-500">
-    Join this circle to see posts!
-  </p>
-  <a href="/circles/{{circle.id}}/join"
-     class="mt-3 inline-block px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
-    Join Circle
-  </a>
-  {{!-- Stop rendering here --}}
-  {{else}}
-
-  {{#if circlePosts}}
-
-  <ol class="grid gap-4">
-    {{#each circlePosts}}
-    <li class="shadow-md p-4 bg-white border rounded-lg hover:shadow-lg transition">
-
-      <h3 class="font-semibold text-lg text-indigo-600">{{title}}</h3>
-      <p class="text-gray-700 mt-2 mb-3">{{body}}</p>
-
-      <p class="text-sm text-gray-600">
-        <strong>Author:</strong> {{authorUsername}}
-      </p>
-
-      {{!-- Owners and Admins can delete posts --}}
-      {{#if (or (equals ../role "owner") (equals ../role "admin"))}}
-      <div class="mt-3">
-        <a href="/posts/{{id}}/delete"
-           class="text-red-600 text-sm hover:underline">
-          Delete Post
-        </a>
-      </div>
-      {{/if}}
-
-    </li>
-    {{/each}}
-  </ol>
+<section class="bg-gray-50 border-neutral-200 border-t border-b py-8">
+  <div class="wrapper">
 
 
-  {{!-- Pagination --}}
-  <div class="flex items-center justify-center mt-6 gap-3">
+    <h2 class="text-2xl font-semibold mb-4">Posts</h2>
 
-    {{#if pagination.hasPrev}}
-    <a href="?page={{pagination.prevPage}}"
-       class="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200">← Prev</a>
+    {{#if circlePosts}}
+
+    <div class="grid md:grid-cols-2 gap-4">
+      {{#each circlePosts}}
+      {{#> postCard hideCircle=true role=../role}}
+      {{/postCard}}
+      {{/each}}
+    </div>
+
+    {{> pagination}}
+
     {{else}}
-    <span class="px-3 py-1 border rounded bg-gray-50 text-gray-400">← Prev</span>
-    {{/if}}
-
-    <span class="px-4 py-1 font-semibold">
-      Page {{pagination.currentPage}} of {{pagination.totalPages}}
-    </span>
-
-    {{#if pagination.hasNext}}
-    <a href="?page={{pagination.nextPage}}"
-       class="px-3 py-1 border rounded bg-gray-100 hover:bg-gray-200">Next →</a>
-    {{else}}
-    <span class="px-3 py-1 border rounded bg-gray-50 text-gray-400">Next →</span>
+    <p class="text-gray-500">This circle has no posts yet.</p>
     {{/if}}
 
   </div>
-
-  {{else}}
-  <p class="text-gray-500">This circle has no posts yet.</p>
-  {{/if}}
-
-  {{/ifEqual}}
-
 </section>

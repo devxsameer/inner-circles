@@ -1,9 +1,12 @@
 <header class="h-12 shadow flex items-center py-2 px-4 xl:px-8 justify-between sticky top-0 z-50 bg-white">
    <h1 class="text-xl font-semibold"><a href="/">InnerCircles</a></h1>
-   <ul class="flex gap-4 text-neutral-800">
-      <li><a href="/">Home</a></li>
-      <li><a href="/circles">Circles</a></li>
-      <li><a href="/posts">Posts</a></li>
+   <ul class="flex gap-4 text-neutral-500">
+      <li><a href="/"
+            class="{{#ifEqual currentPath  '/'}}text-neutral-950 {{/ifEqual}}">Home</a></li>
+      <li><a href="/circles"
+            class="{{#ifEqual currentPath  '/circles'}}text-neutral-950 {{/ifEqual}}">Circles</a></li>
+      <li><a href="/posts"
+            class="{{#ifEqual currentPath  '/posts'}}text-neutral-950 {{/ifEqual}}">Posts</a></li>
    </ul>
    {{#if user}}
    <div class="relative"

@@ -1,0 +1,20 @@
+<div class="bg-white p-5 border border-neutral-200 rounded-md shadow-sm hover:shadow-md transition">
+    <h3 class="font-semibold text-lg ">
+        {{this.name}}
+    </h3>
+    <p class="text-gray-600 text-sm mt-2">
+        {{this.description}}
+    </p>
+
+    <div class="flex justify-between items-center mt-4 text-sm text-gray-500">
+        <span>Total Members: {{this.membersCount}}</span>
+        {{#unless hideOwner}}
+        <span>Owner: {{this.ownerUsername}}</span>
+        {{/unless}}
+    </div>
+
+    <a href="/circles/{{this.id}}"
+       class="mt-4 text-sm inline-block text-indigo-600 hover:underline">
+        View Circle →
+    </a>
+</div>

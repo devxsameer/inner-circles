@@ -7,9 +7,10 @@ function mapPost(row) {
   return {
     id: row.id,
     circleId: row.circle_id,
-    authorId: row.author_id,
+    authorId: row.author_id ?? null,
     title: row.title,
     body: row.body,
+    visibility: row.visibility,
     createdAt: row.created_at,
     authorUsername: row.author_username || "Anonymous",
     circleName: row.circle_name || null,
@@ -115,13 +116,7 @@ export async function getLatestPublicPostsFromDb(limit = 6) {
     [limit]
   );
 
-  return rows.map((row) => ({
-    id: row.id,
-    title: row.title,
-    body: row.body,
-    circleName: row.circle_name,
-    circleId: row.circle_id,
-  }));
+  return rows.map(mapPost);
 }
 
 /* -------------------------------------------------------
