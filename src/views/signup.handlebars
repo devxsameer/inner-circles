@@ -1,38 +1,48 @@
-<h1 class="text-2xl">Sign Up</h1>
+<section class="py-10">
+  <div class="wrapper flex items-center flex-col justify-center">
+    <div class="max-w-xs pt-18">
 
-{{#if errors}}
-{{#if errors.length}}
-<ul class="mb-4 text-red-600">
+      <h1 class="text-2xl font-semibold"><span class="text-3xl block">&#128075;</span> Join InnerCircles</h1>
+      <p class="text-neutral-500 mb-6 text-sm">Create an account to start exploring circles and connecting.</p>
 
-  {{#each errors}}
-  <li>{{this.msg}}</li>
-  {{/each}}
+      {{#if errors}}
+      {{#if errors.length}}
+      <ul class="mb-4 text-red-600">
 
-</ul>
-{{/if}}
-{{/if}}
+        {{#each errors}}
+        <li>{{this.msg}}</li>
+        {{/each}}
 
-<form action=""
-      method="POST"
-      class="flex flex-col gap-2 items-start">
-  <label for="username">
-    Username:
-    <input type="text"
-           name="username"
-           id="username"
-           class="border p-2 w-full rounded"
-           value="{{formData.username}}" />
-  </label>
-  <label for="password">
-    Password:
-    <input type="password"
-           name="password"
-           id="password"
-           class="border p-2 w-full rounded" />
-  </label>
-  <button type="submit"
-          class="border-2 cursor-pointer">Sign Up</button>
-</form>
-<br />
-<a href="/auth/login"
-   class="underline">Log In</a>
+      </ul>
+      {{/if}}
+      {{/if}}
+
+      <form action=""
+            method="POST"
+            class="flex flex-col gap-2">
+        <label for="username">
+          Username:
+          <input type="text"
+                 name="username"
+                 id="username"
+                 class="border p-2 w-full rounded"
+                 value="{{formData.username}}" />
+        </label>
+        <label for="password">
+          Password:
+          <input type="password"
+                 name="password"
+                 id="password"
+                 class="border p-2 w-full rounded" />
+        </label>
+        <button type="submit"
+                class="border-2 bg-neutral-950 text-white px-3 rounded-lg cursor-pointer text-sm py-2">Sign Up</button>
+      </form>
+    </div>
+    <p class="text-neutral-600 text-sm py-12">
+      Already part of InnerCircles?
+      <a href="/auth/login"
+         class="text-black font-semibold">Login instead</a>
+    </p>
+  </div>
+</section>

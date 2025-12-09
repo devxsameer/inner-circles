@@ -8,14 +8,25 @@
    </p>
 
    <div class="mt-8 flex justify-center gap-4">
-      <a href="/signup"
+      {{#if user}}
+      <a href="/posts"
          class="btn-lg hover:bg-neutral-900">
-         Create Account
+         Browse Posts
       </a>
       <a href="/circles"
          class="btn-lg bg-neutral-100 border-neutral-950 text-neutral-950 hover:bg-neutral-200">
          Explore Circles
       </a>
+      {{else}}
+      <a href="/auth/signup"
+         class="btn-lg hover:bg-neutral-900">
+         Create Account
+      </a>
+      <a href="/auth/login"
+         class="btn-lg  bg-neutral-100 border-neutral-950 text-neutral-950 hover:bg-neutral-200">
+         Log In
+      </a>
+      {{/if}}
    </div>
 </section>
 

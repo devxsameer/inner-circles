@@ -1,77 +1,84 @@
-<section class="container py-6 max-w-3xl">
+<section class="py-8">
+    <div class="wrapper">
 
-    {{!-- ================================
-    HEADER SECTION
-    ================================= --}}
-    <h1 class="text-3xl font-bold mb-1 text-rose-600">Update Circle</h1>
-    <p class="text-gray-600 mb-6">{{circle.name}}</p>
+        <h1 class="section-heading mb-0">Update Circle</h1>
+        <p class="text-rose-600 mb-6">{{circle.name}}</p>
 
+        <div class="max-w-xs">
 
-    {{!-- ================================
-    UPDATE CIRCLE FORM
-    ================================= --}}
-    <form action="/circles/{{circle.id}}/update"
-          method="POST"
-          class="bg-white p-5 border rounded-lg shadow-md space-y-4">
+            {{#if errors}}
+            {{#if errors.length}}
+            <ul class="mb-4 text-red-600">
 
-        <div>
-            <label class="font-semibold block mb-1">Circle Name</label>
-            <input type="text"
-                   name="name"
-                   value="{{circle.name}}"
-                   class="w-full border p-2 rounded"
-                   required>
+                {{#each errors}}
+                <li>{{this.msg}}</li>
+                {{/each}}
+
+            </ul>
+            {{/if}}
+            {{/if}}
+
+            <form action="/circles/{{circle.id}}/update"
+                  method="POST"
+                  class="flex flex-col gap-2">
+
+                <div>
+                    <label class="font-medium block mb-1">Circle Name</label>
+                    <input type="text"
+                           name="name"
+                           value="{{circle.name}}"
+                           class="w-full border p-2 rounded">
+                </div>
+
+                <div>
+                    <label class="font-medium block mb-1">Description</label>
+                    <textarea name="description"
+                              class="w-full border p-2 rounded h-24">{{circle.description}}</textarea>
+                </div>
+
+                <button type="submit"
+                        class="btn-lg self-start">
+                    Update Circle
+                </button>
+            </form>
         </div>
 
-        <div>
-            <label class="font-semibold block mb-1">Description</label>
-            <textarea name="description"
-                      class="w-full border p-2 rounded h-24">{{circle.description}}</textarea>
-        </div>
+    </div>
+</section>
 
-        <button class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
-            Update Circle
-        </button>
-    </form>
+<section class="py-8">
+    <div class="wrapper">
 
+        <h2 class="section-heading">Manage Members</h2>
 
-    {{!-- ================================
-    MEMBER MANAGEMENT
-    ================================= --}}
-    <section class="mt-10">
-        <h2 class="text-xl font-semibold mb-3">Manage Members</h2>
-
-        {{!-- Add new member --}}
-        {{#if availableUsers}}
         <form action="/circles/{{circle.id}}/members/add"
               method="POST"
-              class="flex gap-2 items-center mb-6">
+              class="flex flex-col sm:flex-row gap-3 items-start sm:items-center mb-6">
 
-            <select name="userId"
-                    class="border p-2 rounded w-full">
-                {{#each availableUsers}}
-                <option value="{{id}}">{{username}}</option>
-                {{/each}}
-            </select>
+            <input type="text"
+                   name="username"
+                   placeholder="Enter username to add"
+                   autocomplete="off"
+                   class="w-full text-sm sm:flex-1 border border-neutral-300 focus:border-black focus:ring-1 focus:ring-black p-2 rounded-md outline-none transition">
 
-            <button class="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+            <button class="btn-lg w-full sm:w-auto">
                 Add Member
             </button>
         </form>
-        {{/if}}
+
 
 
         {{!-- Member List --}}
-        <ul class="space-y-3">
+        <ul class="flex flex-wrap gap-4">
             {{#each members}}
-            <li class="bg-gray-50 border rounded p-4 flex flex-col gap-2">
+            <li class="bg-gray-50 grow min-w-2xs border border-neutral-200 shadow rounded p-4 flex flex-col gap-2">
 
                 <div class="flex justify-between items-center">
                     <strong>{{username}}</strong>
 
                     {{!-- Role Badge --}}
                     {{#ifEqual role "owner"}}
-                    <span class="px-2 py-1 text-xs bg-yellow-200 text-yellow-800 rounded-full">Owner</span>
+                    <span class="px-2 py-1 text-xs bg-green-200 text-green-800 rounded-full">Owner</span>
                     {{else ifEqual role "admin"}}
                     <span class="px-2 py-1 text-xs bg-blue-200 text-blue-800 rounded-full">Admin</span>
                     {{else}}
@@ -127,22 +134,21 @@
             </li>
             {{/each}}
         </ul>
-    </section>
+
+    </div>
+</section>
 
 
 
-    {{!-- ================================
-    DELETE CIRCLE (OWNER ONLY)
-    ================================= --}}
-    {{#ifEqual role "owner"}}
-    <section class="mt-10">
-        <h2 class="text-xl font-semibold mb-3 text-red-700">Danger Zone</h2>
+{{#ifEqual role "owner"}}
+<section class="py-8">
+    <div class="wrapper">
+        <h2 class="section-heading ">Danger Zone</h2>
 
         <a href="/circles/{{circle.id}}/delete"
-           class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+           class="btn-lg bg-red-600">
             Delete This Circle
         </a>
-    </section>
-    {{/ifEqual}}
-
+    </div>
 </section>
+{{/ifEqual}}

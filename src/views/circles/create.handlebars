@@ -1,66 +1,59 @@
-<section class="container max-w-xl py-6">
+<section class="py-8">
+  <div class="wrapper">
 
-  {{!-- ================================
-  PAGE TITLE
-  ================================= --}}
-  <h1 class="text-3xl font-bold text-rose-600 mb-4">{{title}}</h1>
+    <h1 class="section-heading">{{title}}</h1>
 
-  {{!-- ================================
-  VALIDATION ERRORS
-  ================================= --}}
-  {{#if errors}}
-  {{#if errors.length}}
-  <ul class="mb-4 bg-red-50 border border-red-200 text-red-700 p-3 rounded">
-    {{#each errors}}
-    <li class="mb-1">• {{msg}}</li>
-    {{/each}}
-  </ul>
-  {{/if}}
-  {{/if}}
+    <div class="max-w-xs">
 
 
-  {{!-- ================================
-  FORM
-  ================================= --}}
-  <form method="POST"
-        action=""
-        class="bg-white p-6 rounded-lg shadow-md border space-y-4">
+      {{#if errors}}
+      {{#if errors.length}}
+      <ul class="mb-4 text-red-600">
 
-    {{!-- Name Input --}}
-    <div>
-      <label for="name"
-             class="block font-semibold mb-1">
-        Circle Name
-      </label>
-      <input type="text"
-             name="name"
-             id="name"
-             value="{{formData.name}}"
-             required
-             class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-rose-400" />
-    </div>
+        {{#each errors}}
+        <li>{{this.msg}}</li>
+        {{/each}}
 
-    {{!-- Description Input --}}
-    <div>
-      <label for="description"
-             class="block font-semibold mb-1">
-        Description
-      </label>
-      <textarea name="description"
-                id="description"
-                class="w-full border p-2 h-28 rounded resize-none focus:outline-none focus:ring-2 focus:ring-rose-400">{{formData.description}}</textarea>
-    </div>
-
-    {{!-- Submit Button --}}
-    <button type="submit"
-            class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-700 transition">
-      {{#if formData.id}}
-      Update Circle
-      {{else}}
-      Create Circle
+      </ul>
       {{/if}}
-    </button>
+      {{/if}}
 
-  </form>
+      <form method="POST"
+            action=""
+            class="flex flex-col gap-2">
 
+        {{!-- Name Input --}}
+        <div>
+          <label for="name"
+                 class="block font-medium mb-1">
+            Circle Name
+          </label>
+          <input type="text"
+                 name="name"
+                 id="name"
+                 value="{{formData.name}}"
+                 class="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-rose-400" />
+        </div>
+
+        {{!-- Description Input --}}
+        <div>
+          <label for="description"
+                 class="block font-medium mb-1">
+            Description
+          </label>
+          <textarea name="description"
+                    id="description"
+                    class="w-full border p-2 h-28 rounded resize-none focus:outline-none focus:ring-2 focus:ring-rose-400">{{formData.description}}</textarea>
+        </div>
+
+        {{!-- Submit Button --}}
+        <button type="submit"
+                class="btn-lg self-start">
+          Create Circle
+        </button>
+
+      </form>
+    </div>
+
+  </div>
 </section>
