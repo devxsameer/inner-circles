@@ -1,46 +1,87 @@
-<header class="h-12 shadow flex items-center py-2 px-4 xl:px-8 justify-between sticky top-0 z-50 bg-white">
-   <h1 class="text-xl font-semibold"><a href="/">InnerCircles</a></h1>
-   <ul class="flex gap-4 text-neutral-500">
-      <li><a href="/"
-            class="{{#ifEqual currentPath  '/'}}text-neutral-950 {{/ifEqual}}">Home</a></li>
-      <li><a href="/circles"
-            class="{{#ifEqual currentPath  '/circles'}}text-neutral-950 {{/ifEqual}}">Circles</a></li>
-      <li><a href="/posts"
-            class="{{#ifEqual currentPath  '/posts'}}text-neutral-950 {{/ifEqual}}">Posts</a></li>
-   </ul>
-   {{#if user}}
-   <div class="relative"
-        id="userMenuWrapper">
-      <!-- Trigger -->
-      <button id="userMenuBtn"
-              class="flex items-center gap-1 py-1 px-2 rounded-md hover:bg-neutral-100 transition cursor-pointer">
-         <div class="flex flex-col text-right">
-            <span class="font-medium text-sm/4">{{user.username}}</span>
-            <span class="text-xs/3 text-neutral-500">User</span>
-         </div>
+<header class="h-14 relative shadow flex items-center justify-between px-4 xl:px-8 sticky top-0 z-50 bg-white">
+   <!-- Logo -->
+   <h1 class="text-xl font-semibold">
+      <a href="/">InnerCircles</a>
+   </h1>
 
-         <img class="w-8 h-8 rounded-full object-cover border"
-              src="/images/profile.png"
-              alt="profile">
-      </button>
-
-      <!-- Dropdown -->
-      <div id="userDropdown"
-           class="absolute right-0 mt-2 bg-white shadow-lg rounded-md py-1.5 hidden">
-         <a href="/auth/logout"
-            class="gap-1 text-sm py-1 px-2  hover:bg-neutral-100 transition flex items-center">
-            {{> icons/logout}}
-            Logout
+   <!-- Desktop Nav -->
+   <ul class="hidden md:flex gap-4 text-neutral-500">
+      <li>
+         <a href="/"
+            class="{{#ifEqual currentPath '/'}}text-neutral-950 font-medium{{/ifEqual}}">
+            Home
          </a>
+      </li>
+      <li>
+         <a href="/circles"
+            class="{{#ifEqual currentPath '/circles'}}text-neutral-950 font-medium{{/ifEqual}}">
+            Circles
+         </a>
+      </li>
+      <li>
+         <a href="/posts"
+            class="{{#ifEqual currentPath '/posts'}}text-neutral-950 font-medium{{/ifEqual}}">
+            Posts
+         </a>
+      </li>
+   </ul>
+
+   <!-- Right side -->
+   <div class="flex items-center gap-2">
+
+      {{#if user}}
+      <div class="relative"
+           id="userMenuWrapper">
+         <button id="userMenuBtn"
+                 class="flex items-center gap-1 py-1 px-2 rounded-md hover:bg-neutral-100 transition cursor-pointer">
+            <div class="flex flex-col text-right">
+               <span class="font-medium text-sm leading-tight">{{user.username}}</span>
+               <span class="text-xs text-neutral-500 leading-tight">User</span>
+            </div>
+
+            <img class="w-8 h-8 rounded-full object-cover border"
+                 src="/images/profile.png"
+                 alt="profile">
+         </button>
+
+         <div id="userDropdown"
+              class="absolute right-0 mt-2 bg-white shadow-lg rounded-md py-1.5 hidden w-32">
+            <a href="/auth/logout"
+               class="gap-1 text-sm py-1 px-2 hover:bg-neutral-100 transition flex items-center">
+               {{> icons/logout}} Logout
+            </a>
+         </div>
       </div>
-   </div>
-
-
-   {{else}}
-   <div class="flex">
+      {{else}}
       <a href="/auth/login"
-         class="gap-1 flex items-center rounded text-sm py-1 px-2 hover:bg-neutral-100 transition">{{>
-         icons/login}}Login</a>
+         class="gap-1 flex items-center rounded text-sm py-1 px-2 hover:bg-neutral-100 transition">
+         {{> icons/login}} Login
+      </a>
+      {{/if}}
+
+      {{!-- Mobile menu button --}}
+      <button id="mobileMenuBtn"
+              class="md:hidden flex flex-col gap-[5px] cursor-pointer p-0.5 scale-[0.7]">
+         <span class="w-6 h-1 rounded-xs bg-black block"></span>
+         <span class="w-6 h-1 rounded-xs bg-black block"></span>
+         <span class="w-6 h-1 rounded-xs bg-black block"></span>
+      </button>
    </div>
-   {{/if}}
+
+   <!-- Mobile Nav -->
+   <nav id="mobileNav"
+        class="absolute top-full right-0 left-0 text-center border border-neutral-200 md:hidden hidden flex-col bg-white text-neutral-600 shadow-inner px-4 py-3 space-y-2">
+      <a href="/"
+         class="block py-1 {{#ifEqual currentPath '/'}}font-semibold text-neutral-900{{/ifEqual}}">
+         Home
+      </a>
+      <a href="/circles"
+         class="block py-1 {{#ifEqual currentPath '/circles'}}font-semibold text-neutral-900{{/ifEqual}}">
+         Circles
+      </a>
+      <a href="/posts"
+         class="block py-1 {{#ifEqual currentPath '/posts'}}font-semibold text-neutral-900{{/ifEqual}}">
+         Posts
+      </a>
+   </nav>
 </header>

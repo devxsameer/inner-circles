@@ -14,3 +14,23 @@ document.addEventListener("click", (e) => {
     userDropdown.classList.add("hidden");
   }
 });
+
+// MOBILE NAV
+const mobileBtn = document.getElementById("mobileMenuBtn");
+const mobileNav = document.getElementById("mobileNav");
+
+mobileBtn?.addEventListener("click", () => {
+  mobileNav.classList.toggle("hidden");
+});
+
+// USER DROPDOWN
+const userBtn = document.getElementById("userMenuBtn");
+const dropdown = document.getElementById("userDropdown");
+
+document.addEventListener("click", (e) => {
+  if (userBtn?.contains(e.target)) {
+    dropdown.classList.toggle("hidden");
+  } else if (!dropdown?.contains(e.target)) {
+    dropdown?.classList.add("hidden");
+  }
+});

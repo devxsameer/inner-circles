@@ -50,7 +50,9 @@ export async function createPostsGet(req, res, next) {
   console.log(userCircles);
 
   if (!userCircles.length) {
-    return next(new AppError("Join a circle first to create a post", 400));
+    return next(
+      new AppError("Create or join  a circle first to create a post", 403)
+    );
   }
 
   res.render("posts/create", {
