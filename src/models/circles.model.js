@@ -42,6 +42,22 @@ export async function createCircleInDb({ name, description, ownerId }) {
   return mapCircle(rows[0]);
 }
 
+export async function updateCircleInDb({ circleId, name, description }) {
+  const { rows } = await pool.query(
+    `
+    UPDATE circles
+    SET
+      name = COALESCE($1, name),
+      description = COALESCE($2, description)
+    WHERE id = $3
+    RETURNING *
+    `,
+    [name ?? null, description ?? null, circleId]
+  );
+
+  return mapCircle(rows[0]);
+}
+
 export async function insertOwnerAsMemberInDb({ ownerId, circleId }) {
   const { rows } = await pool.query(
     `INSERT INTO circle_members (user_id, circle_id, role)
@@ -165,7 +181,6 @@ export async function addMemberInDb({ circleId, userId, role }) {
   );
   return mapMembership(rows[0]);
 }
-
 export async function removeMemberFromDb({ circleId, userId }) {
   const { rows } = await pool.query(
     `DELETE FROM circle_members

@@ -59,6 +59,7 @@
                    name="username"
                    placeholder="Enter username to add"
                    autocomplete="off"
+                   required
                    class="w-full text-sm sm:flex-1 border border-neutral-300 focus:border-black focus:ring-1 focus:ring-black p-2 rounded-md outline-none transition">
 
             <button class="btn-lg w-full sm:w-auto">
@@ -92,19 +93,19 @@
                     {{#ifEqual ../role "owner"}}
 
                     {{!-- Cannot modify yourself --}}
-                    {{#unless (equals ../circle.ownerId id)}}
+                    {{#unless (equals ../circle.ownerId userId)}}
 
                     {{!-- Promote / Demote --}}
                     {{#ifEqual role "admin"}}
-                    <a href="/circles/{{../circle.id}}/members/{{id}}/role/member"
+                    <a href="/circles/{{../circle.id}}/members/{{userId}}/role/member"
                        class="text-sm text-indigo-600 hover:underline">Demote to Member</a>
                     {{else}}
-                    <a href="/circles/{{../circle.id}}/members/{{id}}/role/admin"
+                    <a href="/circles/{{../circle.id}}/members/{{userId}}/role/admin"
                        class="text-sm text-indigo-600 hover:underline">Promote to Admin</a>
                     {{/ifEqual}}
 
                     {{!-- Remove member --}}
-                    <a href="/circles/{{../circle.id}}/members/{{id}}/remove"
+                    <a href="/circles/{{../circle.id}}/members/{{userId}}/remove"
                        class="text-sm text-red-600 hover:underline">Remove</a>
 
                     {{/unless}}
@@ -113,17 +114,19 @@
                     {{else ifEqual ../role "admin"}}
 
                     {{!-- Admin cannot modify owner --}}
-                    {{#unless (equals ../circle.ownerId id)}}
+                    {{#unless (equals ../circle.ownerId userId)}}
 
                     {{!-- Admin can promote/demote only members --}}
                     {{#ifEqual role "member"}}
-                    <a href="/circles/{{../circle.id}}/members/{{id}}/role/admin"
+                    <a href="/circles/{{../circle.id}}/members/{{userId}}/role/admin"
                        class="text-sm text-indigo-600 hover:underline">Promote to Admin</a>
+
+                    {{!-- Admin can remove members --}}
+                    <a href="/circles/{{../circle.id}}/members/{{userId}}/remove"
+                       class="text-sm text-red-600 hover:underline">Remove</a>
+
                     {{/ifEqual}}
 
-                    {{!-- Admin can remove members except owner --}}
-                    <a href="/circles/{{../circle.id}}/members/{{id}}/remove"
-                       class="text-sm text-red-600 hover:underline">Remove</a>
 
                     {{/unless}}
 
