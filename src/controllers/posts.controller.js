@@ -19,7 +19,6 @@ export async function getPosts(req, res) {
   const userId = req?.user?.id ?? null;
   const ownedPostsPage = parseInt(req.query.ownedPostsPage) || 1;
   const allPostsPage = parseInt(req.query.allPostsPage) || 1;
-  console.log({ ownedPostsPage, allPostsPage });
 
   const [
     { posts: allPosts, pagination: allPostsPagination },
@@ -35,6 +34,13 @@ export async function getPosts(req, res) {
     allPosts,
     ownedPosts,
     allPostsPagination,
+  });
+}
+
+export async function showPost(req, res) {
+  res.render("posts/details", {
+    title: req.post.title,
+    post: req.post,
   });
 }
 

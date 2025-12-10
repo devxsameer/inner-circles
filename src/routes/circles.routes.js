@@ -95,6 +95,7 @@ circlesRoutes.post(
   loadMembership,
   requirePermission(canManageMembers),
   addMemberPost
+  
 );
 
 export default circlesRoutes;

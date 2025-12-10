@@ -51,11 +51,18 @@ export async function loadMembership(req, res, next) {
 ------------------------------------------------------- */
 export async function loadPost(req, res, next) {
   const { postId } = req.params;
+  const viewerId = req.user?.id ?? null;
 
-  const post = await getPostById(postId);
+  const post = await getPostById(postId, viewerId);
 
   if (!post) {
     return next(new AppError("Post not found", 404, req.originalUrl));
+  }
+
+  if (post.visibility === "members_only" && !post.viewerIsMember && !req.user) {
+    return next(
+      new AppError("This post is visible to members only", 403, req.originalUrl)
+    );
   }
 
   req.post = post;

@@ -8,6 +8,7 @@ import {
   createPostsPost,
   deletePostController,
   getPosts,
+  showPost,
 } from "../controllers/posts.controller.js";
 import { postsValidator } from "../middlewares/validators/posts.validators.js";
 import {
@@ -25,6 +26,8 @@ postsRoutes
   .route("/create")
   .get(ensureAuth, createPostsGet)
   .post(ensureAuth, postsValidator, createPostsPost);
+
+postsRoutes.get("/:postId", loadPost, showPost);
 
 postsRoutes.get(
   "/:postId/delete",

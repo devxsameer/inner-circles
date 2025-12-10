@@ -106,8 +106,8 @@ export async function getPostsByAuthor({ userId, page = 1, limit = 10 }) {
 /* -------------------------------------------------------
    GET SINGLE POST
 ------------------------------------------------------- */
-export async function getPostById(postId) {
-  return await getPostByIdFromDb({ postId });
+export async function getPostById(postId, viewerId = null) {
+  return await getPostByIdFromDb({ postId, viewerId });
 }
 
 /* -------------------------------------------------------

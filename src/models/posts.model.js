@@ -139,14 +139,22 @@ export async function getPostsByAuthorFromDb({ userId, limit, offset }) {
 /* -------------------------------------------------------
    GET SINGLE POST
 ------------------------------------------------------- */
-export async function getPostByIdFromDb({ postId }) {
+export async function getPostByIdFromDb({ postId, viewerId = null }) {
   const { rows } = await pool.query(
-    `SELECT p.*, 
-            u.username AS author_username
+    `SELECT
+        p.*,
+        u.username AS author_username,
+        c.name     AS circle_name,
+        c.id       AS circle_id,
+        (cm.user_id IS NOT NULL) AS viewer_is_member
      FROM posts p
      JOIN users u ON u.id = p.author_id
+     JOIN circles c ON c.id = p.circle_id
+     LEFT JOIN circle_members cm
+        ON cm.circle_id = p.circle_id
+       AND cm.user_id = $2
      WHERE p.id = $1`,
-    [postId]
+    [postId, viewerId]
   );
 
   return mapPost(rows[0]);

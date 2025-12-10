@@ -7,11 +7,11 @@
             {{title}}
         </h1>
 
-        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500 mb-4">
+        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500 mb-2">
             <span>
                 In
                 <a href="/circles/{{circleId}}"
-                   class="text-indigo-600 hover:underline">
+                   class="text-rose-600 hover:underline">
                     {{circleName}}
                 </a>
             </span>
@@ -19,16 +19,18 @@
             <span>•</span>
 
             <span>By {{authorUsername}}</span>
+        </div>
+        <div class="mb-4">
 
             {{#ifEqual visibility "members_only"}}
-            <span class="px-2 py-0.5 rounded bg-gray-200 text-gray-700 text-xs">
+            <span class="px-2 py-0.5 rounded bg-blue-200 text-blue-700 text-xs">
                 Members Only
             </span>
             {{else}}
-            <span class="px-2 py-0.5 rounded bg-green-100 text-green-700 text-xs">
+            <span class="px-2 py-0.5 rounded bg-gray-100 text-gray-700 text-xs">
                 Public
+                {{/ifEqual}}
             </span>
-            {{/ifEqual}}
         </div>
 
         {{!-- ============================
@@ -111,7 +113,7 @@
         {{!-- BACK LINK --}}
         <div class="mt-8">
             <a href="/circles/{{circleId}}"
-               class="text-sm text-indigo-600 hover:underline">
+               class="text-sm text-rose-600 hover:underline">
                 ← Back to Circle
             </a>
         </div>
