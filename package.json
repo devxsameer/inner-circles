@@ -1,7 +1,7 @@
 {
   "name": "inner-circles",
   "version": "1.0.0",
-  "description": "InnerCircles is a club-based social app where users create communities, join circles, post messages, and see author identities only inside their own circles — anonymous to everyone else.",
+  "description": "InnerCircles is a private social platform built with **Node.js, Express, and PostgreSQL**, where users share posts inside invite-only circles. The app focuses on **real-world authentication, fine-grained authorization, and privacy-first content visibility**, going beyond basic CRUD functionality to mirror production-grade access control systems.",
   "type": "module",
   "main": "src/server.js",
   "repository": {
