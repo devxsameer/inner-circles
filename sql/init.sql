@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS circles (
       DEFERRABLE INITIALLY IMMEDIATE,
 
   description TEXT,
-  members_count INT DEFAULT 1, 
+  members_count INT NOT NULL DEFAULT 0,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -117,7 +117,7 @@ BEGIN
 
   ELSIF TG_OP = 'DELETE' THEN
     UPDATE circles
-    SET members_count = members_count - 1
+    SET members_count = GREATEST(members_count - 1, 0)
     WHERE id = OLD.circle_id;
   END IF;
 

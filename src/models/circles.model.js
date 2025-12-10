@@ -174,8 +174,7 @@ export async function addMemberInDb({ circleId, userId, role }) {
   const { rows } = await pool.query(
     `INSERT INTO circle_members (user_id, circle_id, role)
      VALUES ($1, $2, $3)
-     ON CONFLICT (user_id, circle_id)
-     DO UPDATE SET role = EXCLUDED.role
+     ON CONFLICT (user_id, circle_id) DO NOTHING
      RETURNING *`,
     [userId, circleId, role]
   );

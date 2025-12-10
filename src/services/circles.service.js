@@ -130,7 +130,6 @@ export async function changeRole({
     circleId,
   });
 
-  console.log({ targetUserId, circleId });
   if (!targetMembership) {
     throw new Error("User is not a member of this circle");
   }

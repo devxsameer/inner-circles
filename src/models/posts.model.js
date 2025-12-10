@@ -97,12 +97,11 @@ export async function getPostsByCircleFromDb({
 }) {
   const { rows } = await pool.query(
     `SELECT p.*,
-            u.username AS author_username,
-            CASE 
-              WHEN cm.user_id IS NOT NULL THEN u.username
-              ELSE NULL
-            END AS author_username,
-            (cm.user_id IS NOT NULL) AS viewer_is_member
+       CASE 
+         WHEN cm.user_id IS NOT NULL THEN u.username
+         ELSE NULL
+       END AS author_username,
+       (cm.user_id IS NOT NULL) AS viewer_is_member
      FROM posts p
      JOIN users u ON u.id = p.author_id
      LEFT JOIN circle_members cm

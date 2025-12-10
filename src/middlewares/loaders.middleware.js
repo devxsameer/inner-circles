@@ -59,7 +59,7 @@ export async function loadPost(req, res, next) {
     return next(new AppError("Post not found", 404, req.originalUrl));
   }
 
-  if (post.visibility === "members_only" && !post.viewerIsMember && !req.user) {
+  if (post.visibility === "members_only" && !post.viewerIsMember) {
     return next(
       new AppError("This post is visible to members only", 403, req.originalUrl)
     );
