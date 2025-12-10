@@ -37,6 +37,10 @@ app.engine(
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
 
+/* -------------------- PROXY SETTING FOR DEPLOYMENT ON RENDER -------------------- */
+
+app.set("trust proxy", 1);
+
 /* -------------------- CORE MIDDLEWARE -------------------- */
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "..", "public")));
