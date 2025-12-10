@@ -1,3 +1,4 @@
+// src/controllers/auth.controller.js
 import { matchedData, validationResult } from "express-validator";
 import passport from "../config/passport.config.js";
 import { registerUser } from "../services/auth.service.js";
@@ -21,9 +22,13 @@ export async function postSignup(req, res, next) {
 
   const user = await registerUser({ username, password });
 
-  req.login(user, (err) => {
+  req.session.regenerate((err) => {
     if (err) return next(err);
-    res.redirect("/");
+
+    req.login(user, (err) => {
+      if (err) return next(err);
+      res.redirect("/");
+    });
   });
 }
 
@@ -31,14 +36,14 @@ export function getLogin(req, res) {
   res.render("login", { title: "Login" });
 }
 
-export async function postLogin(req, res, next) {
+export function postLogin(req, res, next) {
   passport.authenticate("local", (err, user, info) => {
     if (err) return next(err);
 
     if (!user) {
       return res.render("login", {
         title: "Login",
-        errors: [{ msg: info?.message }],
+        errors: [{ msg: info?.message || "Invalid credentials" }],
       });
     }
 
@@ -48,18 +53,19 @@ export async function postLogin(req, res, next) {
       req.login(user, (err) => {
         if (err) return next(err);
 
-        return res.redirect("/");
+        const redirectTo = req.query.next || "/";
+        res.redirect(redirectTo);
       });
     });
   })(req, res, next);
 }
 
-export function getLogout(req, res) {
+export function getLogout(req, res, next) {
   req.logout((err) => {
     if (err) return next(err);
 
     req.session.destroy(() => {
-      res.clearCookie("connect.sid");
+      res.clearCookie("innercircles.sid");
       res.redirect("/");
     });
   });

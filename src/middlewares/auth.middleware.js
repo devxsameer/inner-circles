@@ -6,3 +6,10 @@ export function ensureAuth(req, res, next) {
 
   res.redirect(`/auth/login?next=${encodeURIComponent(req.originalUrl)}`);
 }
+
+export function ensureGuest(req, res, next) {
+  if (req.isAuthenticated()) {
+    return res.redirect("/");
+  }
+  next();
+}

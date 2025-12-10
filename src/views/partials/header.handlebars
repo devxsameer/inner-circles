@@ -46,10 +46,15 @@
 
          <div id="userDropdown"
               class="absolute right-0 mt-2 bg-white shadow-lg rounded-md py-1.5 hidden w-32">
-            <a href="/auth/logout"
-               class="gap-1 text-sm py-1 px-2 hover:bg-neutral-100 transition flex items-center">
-               {{> icons/logout}} Logout
-            </a>
+            <form action="/auth/logout"
+                  method="POST"
+                  class="">
+               <button type="submit"
+                       name="logoutBtn"
+                       class="w-full h-full justify-center cursor-pointer gap-1 text-sm py-1 px-2 hover:bg-neutral-100 transition flex items-center">
+                  {{> icons/logout}} Logout
+               </button>
+            </form>
          </div>
       </div>
       {{else}}

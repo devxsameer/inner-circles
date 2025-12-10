@@ -1,5 +1,4 @@
 // src/routes/auth.routes.js
-
 import { Router } from "express";
 import {
   getLogin,
@@ -13,16 +12,20 @@ import {
   loginValidator,
   signupValidator,
 } from "../middlewares/validators/auth.validators.js";
+import { ensureGuest } from "../middlewares/auth.middleware.js";
 
 const authRoutes = Router();
 
-authRoutes.route("/signup").get(getSignup).post(signupValidator, postSignup);
+authRoutes
+  .route("/signup")
+  .get(ensureGuest, getSignup)
+  .post(ensureGuest, signupValidator, postSignup);
 
 authRoutes
   .route("/login")
-  .get(getLogin)
+  .get(ensureGuest, getLogin)
   .post(loginLimiter, loginValidator, postLogin);
 
-authRoutes.get("/logout", getLogout);
+authRoutes.post("/logout", getLogout);
 
 export default authRoutes;
