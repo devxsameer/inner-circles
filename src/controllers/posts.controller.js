@@ -5,7 +5,8 @@ import {
   createPost,
   deletePost,
   getAllPosts,
-  getPostsByAuthor, // this must exist in your service
+  getPostsByAuthor,
+  updatePost, // this must exist in your service
 } from "../services/posts.service.js";
 
 import { getCirclesUserIsMemberOf } from "../services/circles.service.js";
@@ -53,8 +54,6 @@ export async function createPostsGet(req, res, next) {
   // The user should be able to post in ANY circle they are a member of
   const userCircles = await getCirclesUserIsMemberOf(userId);
 
-  console.log(userCircles);
-
   if (!userCircles.length) {
     return next(
       new AppError("Create or join  a circle first to create a post", 403)
@@ -67,6 +66,28 @@ export async function createPostsGet(req, res, next) {
   });
 }
 
+export async function updatePostGet(req, res) {
+  res.render("posts/update", {
+    title: "Update Post",
+  });
+}
+
+export async function updatePostPost(req, res) {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.render("posts/update", {
+      title: "Update Post",
+      errors: errors.array(),
+    });
+  }
+
+  const { title, body, visibility } = matchedData(req);
+
+  await updatePost({ postId: req.post.id, title, visibility, body });
+
+  res.redirect("/posts");
+}
 /* -------------------------------------------------------
    POST: Create New Post
 ------------------------------------------------------- */

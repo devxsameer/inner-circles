@@ -9,6 +9,8 @@ import {
   deletePostController,
   getPosts,
   showPost,
+  updatePostGet,
+  updatePostPost,
 } from "../controllers/posts.controller.js";
 import { postsValidator } from "../middlewares/validators/posts.validators.js";
 import {
@@ -16,7 +18,7 @@ import {
   loadMembership,
   loadPost,
 } from "../middlewares/loaders.middleware.js";
-import { canDeletePost } from "../policies/circles.policies.js";
+import { canDeletePost, canUpdatePost } from "../policies/circles.policies.js";
 import { requirePermission } from "../middlewares/permissions.middleware.js";
 
 const postsRoutes = Router();
@@ -28,6 +30,25 @@ postsRoutes
   .post(ensureAuth, postsValidator, createPostsPost);
 
 postsRoutes.get("/:postId", loadPost, showPost);
+postsRoutes
+  .route("/:postId/update")
+  .get(
+    ensureAuth,
+    loadPost,
+    loadCircle,
+    loadMembership,
+    requirePermission(canUpdatePost, "post"),
+    updatePostGet
+  )
+  .post(
+    ensureAuth,
+    loadPost,
+    loadCircle,
+    loadMembership,
+    requirePermission(canUpdatePost, "post"),
+    postsValidator,
+    updatePostPost
+  );
 
 postsRoutes.get(
   "/:postId/delete",

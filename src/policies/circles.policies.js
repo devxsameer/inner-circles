@@ -16,6 +16,13 @@ export const canDeletePost = (req, post) => {
   return post.authorId === req.user.id;
 };
 
+export const canUpdatePost = (req, post) => {
+  if (!req.user) return false;
+  if (!req.membership) return false;
+
+  return post.authorId === req.user.id;
+};
+
 export const canDeleteCircle = (req) => {
   return !!req.membership && req.membership.role === "owner";
 };

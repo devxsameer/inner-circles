@@ -1,7 +1,8 @@
 <section class="py-8">
     <div class="wrapper">
 
-        <h1 class="section-heading">{{title}}</h1>
+        <h1 class="section-heading mb-0">Update Post</h1>
+        <p class="text-rose-600 mb-6">{{post.title}}</p>
 
         <div class="max-w-xs">
 
@@ -28,7 +29,7 @@
                            name="title"
                            id="title"
                            class="border p-2 w-full rounded"
-                           value="{{formData.title}}"
+                           value="{{post.title}}"
                            required />
                 </label>
 
@@ -56,13 +57,13 @@
                             class="border p-2 w-full rounded">
                         <option value="public"
                                 {{isSelected
-                                formData.visibility "public"
+                                post.visibility "public"
                                 }}>
                             Public
                         </option>
                         <option value="members_only"
                                 {{isSelected
-                                formData.visibility "members_only"
+                                post.visibility "members_only"
                                 }}>
                             Members Only
                         </option>
@@ -76,7 +77,7 @@
                               id="body"
                               rows="6"
                               class="border p-2 w-full rounded"
-                              required>{{formData.body}}</textarea>
+                              required>{{post.body}}</textarea>
                 </label>
 
                 {{!-- Actions --}}

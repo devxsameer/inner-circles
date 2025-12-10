@@ -37,6 +37,20 @@ export async function createPostInDb({
 
   return mapPost(rows[0]);
 }
+export async function updatePostInDb({ postId, title, body, visibility }) {
+  const { rows } = await pool.query(
+    `UPDATE posts
+    SET
+      title = COALESCE($1, title),
+      body = COALESCE($2, body),
+      visibility = COALESCE($3, visibility)
+    WHERE id = $4
+    RETURNING *`,
+    [title ?? null, body ?? null, visibility ?? null, postId]
+  );
+
+  return mapPost(rows[0]);
+}
 
 /* -------------------------------------------------------
    COUNT POSTS

@@ -11,6 +11,7 @@ import {
   countPostsByAuthorFromDb,
   countAllPostsFromDb,
   getLatestPublicPostsFromDb,
+  updatePostInDb,
 } from "../models/posts.model.js";
 import { getPagination } from "../utils/pagination.js";
 
@@ -25,6 +26,9 @@ export async function createPost({
   visibility,
 }) {
   return await createPostInDb({ circleId, authorId, title, body, visibility });
+}
+export async function updatePost({ postId, title, body, visibility }) {
+  return await updatePostInDb({ postId, title, body, visibility });
 }
 
 export async function getLatestPublicPosts(limit = 6) {
