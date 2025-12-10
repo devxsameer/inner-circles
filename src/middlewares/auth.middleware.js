@@ -1,4 +1,8 @@
+// src/middlewares/auth.middleware.js
 export function ensureAuth(req, res, next) {
-  if (req.isAuthenticated()) return next();
-  res.redirect("/auth/login");
+  if (req.isAuthenticated()) {
+    return next();
+  }
+
+  res.redirect(`/auth/login?next=${encodeURIComponent(req.originalUrl)}`);
 }

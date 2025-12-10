@@ -1,24 +1,27 @@
 {
   "name": "inner-circles",
   "version": "1.0.0",
-  "description": "InnerCircles is a club-based social app where users create communities, join circles, post messages, and see author identities only inside their own clubs — anonymous to everyone else.",
+  "description": "InnerCircles is a club-based social app where users create communities, join circles, post messages, and see author identities only inside their own circles — anonymous to everyone else.",
   "type": "module",
   "main": "src/server.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/devxsameer/inner-circles.git"
+    "url": "https://github.com/devxsameer/inner-circles.git"
   },
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "concurrently -n \"SERVER,TAILWIND\" -c \"cyan,magenta\" \"pnpm dev:server\" \"pnpm dev:css\"",
+    "start": "NODE_ENV=production node src/server.js",
+    "dev": "NODE_ENV=development concurrently -n \"SERVER,TAILWIND\" -c \"cyan,magenta\" \"pnpm dev:server\" \"pnpm dev:css\"",
     "dev:server": "nodemon",
     "dev:css": "tailwindcss -i ./public/css/global.css -o ./public/css/output.css --watch --fast",
-    "css:build": "tailwindcss -i ./public/css/global.css -o ./public/css/output.css --minify"
+    "css:build": "tailwindcss -i ./public/css/global.css -o ./public/css/output.css --minify",
+    "lint": "echo \"Add ESLint later\""
   },
-  "keywords": [],
-  "author": "",
+  "author": "Sameer Ali",
   "license": "ISC",
-  "packageManager": "pnpm@10.24.0+sha512.01ff8ae71b4419903b65c60fb2dc9d34cf8bb6e06d03bde112ef38f7a34d6904c424ba66bea5cdcf12890230bf39f9580473140ed9c946fef328b6e5238a345a",
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@10.24.0",
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.17",
     "concurrently": "^9.2.1",

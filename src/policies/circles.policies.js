@@ -1,34 +1,30 @@
-// src/policies/circles.polices.js
-export const canSeeAuthor = async (req) => {
-  return !!req.membership;
+// src/policies/circles.policies.js
+
+export const canSeeAuthor = (req) => {
+  return Boolean(req.membership);
 };
 
 export const canPost = (req) => {
-  return !!req.membership;
+  return Boolean(req.membership);
 };
 
 export const canDeletePost = (req, post) => {
-  if (!req.user) return false;
-  if (!req.membership) return false;
+  if (!req.user || !req.membership) return false;
 
   const role = req.membership.role;
   if (role === "owner" || role === "admin") return true;
+
   return post.authorId === req.user.id;
 };
 
 export const canUpdatePost = (req, post) => {
-  if (!req.user) return false;
-  if (!req.membership) return false;
-
-  return post.authorId === req.user.id;
+  return Boolean(req.user && req.membership && post.authorId === req.user.id);
 };
 
 export const canDeleteCircle = (req) => {
-  return !!req.membership && req.membership.role === "owner";
+  return req.membership?.role === "owner";
 };
+
 export const canManageMembers = (req) => {
-  return (
-    (!!req.membership && req.membership.role === "owner") ||
-    req.membership.role === "admin"
-  );
+  return req.membership?.role === "owner" || req.membership?.role === "admin";
 };
