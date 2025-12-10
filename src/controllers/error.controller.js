@@ -1,42 +1,39 @@
 // src/controllers/error.controller.js
 
-// development
 const sendErrorDev = (err, res) => {
   console.error("ERROR 💥:", err);
 
-  return res.status(err.statusCode).render("error", {
+  res.status(err.statusCode || 500).render("error", {
     title: "Something went wrong!",
-    code: err.statusCode,
+    code: err.statusCode || 500,
     message: err.message || "Please try again later.",
-    // stack: err.stack,
-    url: err.url,
+    url: err.url || null,
   });
 };
 
-// production
 const sendErrorProd = (err, res) => {
   if (err.isOperational) {
     return res.status(err.statusCode).render("error", {
-      // Use 'error.ejs'
       title: "Something went wrong!",
       code: err.statusCode,
       message: err.message,
-      url: err.url,
+      url: err.url || null,
     });
   }
 
-  console.error("ERROR 💥:", err);
-  return res.status(err.statusCode).render("error", {
+  console.error("UNEXPECTED ERROR 💥:", err);
+
+  return res.status(500).render("error", {
     title: "Something went wrong!",
-    code: err.statusCode,
+    code: 500,
     message: "Please try again later.",
-    url: err.url,
+    url: null,
   });
 };
 
 export default function globalErrorHandler(err, req, res, next) {
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || "error";
+  err.statusCode ||= 500;
+  err.status ||= "error";
 
   if (process.env.NODE_ENV === "production") {
     sendErrorProd(err, res);

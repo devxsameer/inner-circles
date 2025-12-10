@@ -1,11 +1,14 @@
-import connectPg from "connect-pg-simple";
+// src/utils/sessionStore.js
+import connectPgSimple from "connect-pg-simple";
 import session from "express-session";
 import pool from "../database/pool.js";
 
-const PgStore = connectPg(session);
+const PgSessionStore = connectPgSimple(session);
 
-export const sessionStore = new PgStore({
-  pool,
-  tableName: "session",
-  createTableIfMissing: true,
-});
+export function createSessionStore() {
+  return new PgSessionStore({
+    pool,
+    tableName: "sessions",
+    createTableIfMissing: true,
+  });
+}

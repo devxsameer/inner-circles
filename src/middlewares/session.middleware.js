@@ -1,15 +1,18 @@
+// src/middlewares/session.middleware.js
 import session from "express-session";
-import { sessionStore } from "../utils/sessionStore.js";
+import { createSessionStore } from "../utils/sessionStore.js";
 
 export const sessionMiddleware = session({
-  store: sessionStore,
+  name: "innercircles.sid",
+  store: createSessionStore(),
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+
   cookie: {
     httpOnly: true,
-    secure: false,
-    maxAge: 1000 * 60 * 60 * 24 * 7,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
   },
 });

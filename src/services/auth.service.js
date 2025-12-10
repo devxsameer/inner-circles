@@ -1,23 +1,56 @@
+// src/services/users.service.js
+
 import {
   createUserInDb,
   getUserByIdFromDb,
   getUserByUsernameFromDb,
 } from "../models/users.model.js";
+import AppError from "../utils/appError.js";
 
 import { hashPassword } from "../utils/hash.js";
 
-export const registerUser = async ({ username, password }) => {
-  const hashed = await hashPassword(password);
-  return createUserInDb({ username, hashedPassword: hashed });
-};
+/**
+ * Register a new user
+ */
+export async function registerUser({ username, password }) {
+  if (!username || !password) {
+    throw new Error("Username and password are required");
+  }
 
-export const validateUser = async (username, password, verifyFn) => {
+  try {
+    const hashedPassword = await hashPassword(password);
+
+    return await createUserInDb({
+      username,
+      hashedPassword,
+    });
+  } catch (err) {
+    if (err.code === "23505") {
+      throw new AppError(`Username "${username}" is already taken`, 409);
+    }
+
+    throw err;
+  }
+}
+
+/**
+ * Validate user credentials (used by Passport / auth flow)
+ */
+export async function validateUser(username, password, verifyFn) {
+  if (!username || !password) return null;
+
   const user = await getUserByUsernameFromDb(username);
+
   if (!user) return null;
-  console.log(user);
 
-  const ok = await verifyFn(password, user.passwordHash);
-  return ok ? user : null;
-};
+  const isValid = await verifyFn(password, user.passwordHash);
 
-export { getUserByIdFromDb as getUserById };
+  return isValid ? user : null;
+}
+
+/**
+ * Get user by id
+ */
+export async function getUserById(id) {
+  return getUserByIdFromDb(id);
+}
