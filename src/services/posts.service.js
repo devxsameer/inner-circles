@@ -7,61 +7,46 @@ import {
   deletePostFromDb,
   getAllPostsFromDb,
   getPostsByAuthorFromDb,
-  countPostsByCircleFromDb,
   countPostsByAuthorFromDb,
   countAllPostsFromDb,
   getLatestPublicPostsFromDb,
   updatePostInDb,
+  countVisiblePostsByCircleFromDb,
 } from "../models/posts.model.js";
+
 import { getPagination } from "../utils/pagination.js";
 
 /* -------------------------------------------------------
-   CREATE POST
+   CREATE + UPDATE
 ------------------------------------------------------- */
-export async function createPost({
-  circleId,
-  authorId,
-  title,
-  body,
-  visibility,
-}) {
-  return await createPostInDb({ circleId, authorId, title, body, visibility });
-}
-export async function updatePost({ postId, title, body, visibility }) {
-  return await updatePostInDb({ postId, title, body, visibility });
-}
+export const createPost = (data) => createPostInDb(data);
+export const updatePost = (data) => updatePostInDb(data);
 
-export async function getLatestPublicPosts(limit = 6) {
-  return await getLatestPublicPostsFromDb(limit);
-}
+export const getLatestPublicPosts = (limit = 6) =>
+  getLatestPublicPostsFromDb(limit);
 
 /* -------------------------------------------------------
-   GET ALL POSTS FROM A CIRCLE
+   GET POSTS FROM A CIRCLE (viewer-aware)
 ------------------------------------------------------- */
 export async function getPostsByCircle({
   circleId,
   viewerId,
-  role,
   page = 1,
   limit = 10,
 }) {
   const { limit: l, offset } = getPagination({ page, limit });
 
-  const visibilityList = ["owner", "member", "admin"].includes(role)
-    ? ["members_only", "public"]
-    : ["public"];
-
   const posts = await getPostsByCircleFromDb({
     circleId,
     viewerId,
-    visibilityList,
     limit: l,
     offset,
   });
 
-  const total = await countPostsByCircleFromDb({
+  // NEW: count only posts that viewer can see
+  const total = await countVisiblePostsByCircleFromDb({
     circleId,
-    visibilityList,
+    viewerId,
   });
 
   const totalPages = Math.ceil(total / l);
@@ -80,7 +65,7 @@ export async function getPostsByCircle({
 }
 
 /* -------------------------------------------------------
-   GET ALL POSTS OF A Author
+   POSTS BY AUTHOR
 ------------------------------------------------------- */
 export async function getPostsByAuthor({ userId, page = 1, limit = 10 }) {
   const { limit: l, offset } = getPagination({ page, limit });
@@ -108,21 +93,18 @@ export async function getPostsByAuthor({ userId, page = 1, limit = 10 }) {
 }
 
 /* -------------------------------------------------------
-   GET SINGLE POST
+   SINGLE POST
 ------------------------------------------------------- */
-export async function getPostById(postId, viewerId = null) {
-  return await getPostByIdFromDb({ postId, viewerId });
-}
+export const getPostById = (postId, viewerId = null) =>
+  getPostByIdFromDb({ postId, viewerId });
 
 /* -------------------------------------------------------
    DELETE POST
 ------------------------------------------------------- */
-export async function deletePost(postId) {
-  return await deletePostFromDb({ postId });
-}
+export const deletePost = (postId) => deletePostFromDb({ postId });
 
 /* -------------------------------------------------------
-   GET ALL POSTS (optionally include viewerId)
+   GET ALL POSTS (global feed)
 ------------------------------------------------------- */
 export async function getAllPosts({ viewerId = null, page = 1, limit = 10 }) {
   const { limit: l, offset } = getPagination({ page, limit });
@@ -133,7 +115,7 @@ export async function getAllPosts({ viewerId = null, page = 1, limit = 10 }) {
     offset,
   });
 
-  const total = await countAllPostsFromDb();
+  const total = await countAllPostsFromDb({ viewerId });
   const totalPages = Math.ceil(total / l);
 
   return {

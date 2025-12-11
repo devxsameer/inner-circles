@@ -6,18 +6,28 @@ import {
   deletePost,
   getAllPosts,
   getPostsByAuthor,
-  updatePost, // this must exist in your service
+  updatePost,
 } from "../services/posts.service.js";
 
 import { getCirclesUserIsMemberOf } from "../services/circles.service.js";
-
 import AppError from "../utils/appError.js";
 
-/* -------------------------------------------------------
-   GET: User's Posts
-------------------------------------------------------- */
+/* ========================================================================
+   CONTROLLER: Posts
+   Handles displaying posts, creating posts, updating posts, and deleting posts.
+   Business logic lives in services; this layer handles validation + rendering.
+   ======================================================================== */
+
+/* ------------------------------------------------------------------------
+   GET /posts
+   Display:
+   - All posts visible to the user (global feed)
+   - Posts created by the user (owned posts)
+   Supports pagination on both sections.
+------------------------------------------------------------------------ */
 export async function getPosts(req, res) {
   const userId = req?.user?.id ?? null;
+
   const ownedPostsPage = parseInt(req.query.ownedPostsPage) || 1;
   const allPostsPage = parseInt(req.query.allPostsPage) || 1;
 
@@ -31,13 +41,17 @@ export async function getPosts(req, res) {
 
   res.render("posts", {
     title: "All Posts",
-    ownedPostsPagination,
     allPosts,
     ownedPosts,
     allPostsPagination,
+    ownedPostsPagination,
   });
 }
 
+/* ------------------------------------------------------------------------
+   GET /posts/:id
+   Display a single post. req.post is loaded by param middleware.
+------------------------------------------------------------------------ */
 export async function showPost(req, res) {
   res.render("posts/details", {
     title: req.post.title,
@@ -45,18 +59,19 @@ export async function showPost(req, res) {
   });
 }
 
-/* -------------------------------------------------------
-   GET: Create Post Form
-------------------------------------------------------- */
+/* ------------------------------------------------------------------------
+   GET /posts/create
+   Show form for creating a new post.
+   User must be a member of at least one circle.
+------------------------------------------------------------------------ */
 export async function createPostsGet(req, res, next) {
   const userId = req.user?.id;
 
-  // The user should be able to post in ANY circle they are a member of
   const userCircles = await getCirclesUserIsMemberOf(userId);
 
   if (!userCircles.length) {
     return next(
-      new AppError("Create or join  a circle first to create a post", 403)
+      new AppError("Create or join a circle first to create a post", 403)
     );
   }
 
@@ -66,12 +81,22 @@ export async function createPostsGet(req, res, next) {
   });
 }
 
+/* ------------------------------------------------------------------------
+   GET /posts/:id/update
+   Display the update form for a post.
+   req.post is provided by middleware.
+------------------------------------------------------------------------ */
 export async function updatePostGet(req, res) {
   res.render("posts/update", {
     title: "Update Post",
   });
 }
 
+/* ------------------------------------------------------------------------
+   POST /posts/:id/update
+   Handle post update submission.
+   Validated data only (matchedData).
+------------------------------------------------------------------------ */
 export async function updatePostPost(req, res) {
   const errors = validationResult(req);
 
@@ -84,13 +109,20 @@ export async function updatePostPost(req, res) {
 
   const { title, body, visibility } = matchedData(req);
 
-  await updatePost({ postId: req.post.id, title, visibility, body });
+  await updatePost({
+    postId: req.post.id,
+    title,
+    visibility,
+    body,
+  });
 
-  res.redirect("/posts");
+  res.redirect(`/posts/${req.post.id}`);
 }
-/* -------------------------------------------------------
-   POST: Create New Post
-------------------------------------------------------- */
+
+/* ------------------------------------------------------------------------
+   POST /posts/create
+   Handle creation of a new post.
+------------------------------------------------------------------------ */
 export async function createPostsPost(req, res, next) {
   const errors = validationResult(req);
 
@@ -118,6 +150,10 @@ export async function createPostsPost(req, res, next) {
   res.redirect("/posts");
 }
 
+/* ------------------------------------------------------------------------
+   POST /posts/:id/delete
+   Delete a post (authorization handled by middleware).
+------------------------------------------------------------------------ */
 export async function deletePostController(req, res) {
   await deletePost(req.post.id);
   res.redirect("/posts");

@@ -12,9 +12,9 @@ function mapPost(row) {
     body: row.body,
     visibility: row.visibility,
     createdAt: row.created_at,
-    authorUsername: row.author_username || "Anonymous",
-    circleName: row.circle_name || null,
-    viewerIsMember: row.viewer_is_member ?? null,
+    authorUsername: row.author_username ?? "Anonymous",
+    circleName: row.circle_name ?? null,
+    viewerIsMember: Boolean(row.viewer_is_member),
   };
 }
 
@@ -56,20 +56,38 @@ export async function updatePostInDb({ postId, title, body, visibility }) {
    COUNT POSTS
 ------------------------------------------------------- */
 
-export async function countPostsByCircleFromDb({ circleId, visibilityList }) {
+export async function countVisiblePostsByCircleFromDb({ circleId, viewerId }) {
   const { rows } = await pool.query(
     `SELECT COUNT(*) AS total
-     FROM posts
-     WHERE circle_id = $1
-       AND visibility = ANY($2)`,
-    [circleId, visibilityList]
+     FROM posts p
+     LEFT JOIN circle_members cm
+       ON cm.circle_id = p.circle_id
+      AND cm.user_id = $2
+     WHERE p.circle_id = $1
+       AND (
+         p.visibility = 'public'
+         OR (p.visibility = 'members_only' AND cm.user_id IS NOT NULL)
+       )`,
+    [circleId, viewerId]
   );
 
   return Number(rows[0].total);
 }
 
-export async function countAllPostsFromDb() {
-  const { rows } = await pool.query(`SELECT COUNT(*) AS total FROM posts`);
+export async function countAllPostsFromDb({ viewerId = null }) {
+  const { rows } = await pool.query(
+    `SELECT 
+       COUNT(*) AS total
+     FROM posts p
+     LEFT JOIN circle_members cm
+       ON cm.circle_id = p.circle_id
+      AND cm.user_id = $1
+     WHERE 
+       p.visibility = 'public'
+       OR (p.visibility = 'members_only' AND cm.user_id IS NOT NULL)
+    `,
+    [viewerId]
+  );
 
   return Number(rows[0].total);
 }
@@ -91,26 +109,29 @@ export async function countPostsByAuthorFromDb({ userId }) {
 export async function getPostsByCircleFromDb({
   circleId,
   viewerId,
-  visibilityList,
   limit,
   offset,
 }) {
   const { rows } = await pool.query(
     `SELECT p.*,
-       CASE 
-         WHEN cm.user_id IS NOT NULL THEN u.username
-         ELSE NULL
-       END AS author_username,
-       (cm.user_id IS NOT NULL) AS viewer_is_member
+        CASE 
+          WHEN p.visibility = 'public' AND cm.user_id IS NULL THEN 'Anonymous'
+          ELSE u.username
+        END AS author_username,
+        (cm.user_id IS NOT NULL) AS viewer_is_member
      FROM posts p
      JOIN users u ON u.id = p.author_id
      LEFT JOIN circle_members cm
        ON cm.circle_id = p.circle_id
       AND cm.user_id = $2
-     WHERE p.circle_id = $1 AND p.visibility = ANY($3)
+     WHERE p.circle_id = $1
+       AND (
+         p.visibility = 'public' 
+         OR (p.visibility = 'members_only' AND cm.user_id IS NOT NULL)
+       )
      ORDER BY p.created_at DESC
-     LIMIT $4 OFFSET $5`,
-    [circleId, viewerId, visibilityList, limit, offset]
+     LIMIT $3 OFFSET $4`,
+    [circleId, viewerId, limit, offset]
   );
 
   return rows.map(mapPost);
@@ -118,9 +139,13 @@ export async function getPostsByCircleFromDb({
 
 export async function getLatestPublicPostsFromDb(limit = 6) {
   const { rows } = await pool.query(
-    `SELECT p.id, p.title, p.body, 
-            c.name AS circle_name,
-            c.id   AS circle_id
+    `SELECT 
+        p.id,
+        p.title,
+        p.body,
+        c.name AS circle_name,
+        c.id AS circle_id,
+        'Anonymous' AS author_username
      FROM posts p
      JOIN circles c ON c.id = p.circle_id
      WHERE p.visibility = 'public'
@@ -156,17 +181,24 @@ export async function getPostByIdFromDb({ postId, viewerId = null }) {
   const { rows } = await pool.query(
     `SELECT
         p.*,
-        u.username AS author_username,
-        c.name     AS circle_name,
-        c.id       AS circle_id,
+        CASE
+          WHEN p.visibility = 'public' AND cm.user_id IS NULL THEN 'Anonymous'
+          ELSE u.username
+        END AS author_username,
+        c.name AS circle_name,
+        c.id AS circle_id,
         (cm.user_id IS NOT NULL) AS viewer_is_member
      FROM posts p
      JOIN users u ON u.id = p.author_id
      JOIN circles c ON c.id = p.circle_id
      LEFT JOIN circle_members cm
-        ON cm.circle_id = p.circle_id
-       AND cm.user_id = $2
-     WHERE p.id = $1`,
+       ON cm.circle_id = p.circle_id
+      AND cm.user_id = $2
+     WHERE p.id = $1
+       AND (
+         p.visibility = 'public'
+         OR (p.visibility = 'members_only' AND cm.user_id IS NOT NULL)
+       )`,
     [postId, viewerId]
   );
 
@@ -184,7 +216,7 @@ export async function deletePostFromDb({ postId }) {
     [postId]
   );
 
-  return rows[0] || null; // return deleted post if needed
+  return rows[0] || null;
 }
 
 /* -------------------------------------------------------
@@ -192,9 +224,12 @@ export async function deletePostFromDb({ postId }) {
 ------------------------------------------------------- */
 export async function getAllPostsFromDb({ viewerId = null, limit, offset }) {
   const { rows } = await pool.query(
-    `SELECT
+    `SELECT 
         p.*,
-        CASE WHEN cm.user_id IS NOT NULL THEN u.username ELSE NULL END AS author_username,
+        CASE
+          WHEN p.visibility = 'public' AND cm.user_id IS NULL THEN 'Anonymous'
+          ELSE u.username
+        END AS author_username,
         c.name AS circle_name,
         c.id AS circle_id,
         (cm.user_id IS NOT NULL) AS viewer_is_member
@@ -204,6 +239,9 @@ export async function getAllPostsFromDb({ viewerId = null, limit, offset }) {
      LEFT JOIN circle_members cm
         ON cm.circle_id = p.circle_id
        AND cm.user_id = $1
+     WHERE 
+       p.visibility = 'public'
+       OR (p.visibility = 'members_only' AND cm.user_id IS NOT NULL)
      ORDER BY p.created_at DESC
      LIMIT $2 OFFSET $3`,
     [viewerId, limit, offset]
