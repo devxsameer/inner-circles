@@ -32,19 +32,21 @@
                            required />
                 </label>
 
-                {{!-- Circle (READ-ONLY) --}}
-                <div>
-                    <label class="block text-sm font-medium mb-1">
-                        Circle
-                    </label>
-                    <div class="border p-2 rounded bg-gray-50 text-gray-600">
-                        {{circle.name}}
-                    </div>
+                <div class="self-start">
+                    <label class="block">Circle</label>
+                    <select name="circleId"
+                            class="border p-2 w-full rounded">
 
-                    {{!-- Hidden input to preserve circleId --}}
-                    <input type="hidden"
-                           name="circleId"
-                           value="{{circle.id}}" />
+                        {{#each userCircles}}
+                        <option value="{{id}}"
+                                {{isSelected
+                                ../formData.genre_id
+                                id}}>
+                            {{name}}
+                        </option>
+                        {{/each}}
+
+                    </select>
                 </div>
 
                 {{!-- Visibility --}}

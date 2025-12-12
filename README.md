@@ -1,8 +1,36 @@
 # InnerCircles
 
-InnerCircles is a club-based social platform where users create private communities (“circles”), share posts, and experience **identity-aware privacy** — authors are visible only to members of the same circle and anonymous to everyone else.
+### _Private communities. Real conversations. Public anonymity._
+
+Node • Express • PostgreSQL • Passport • Tailwind
+
+**InnerCircles** is a modern, community-based social platform where users can:
+
+- Create and join private circles
+- Post publicly or privately
+- Reveal identities **only within their circles**
+- Manage members with strict **role-based permissions**
+
+It blends privacy, collaboration, and anonymity into a clean, simple user experience — making it a portfolio-grade full-stack project.
 
 This project started as _The Odin Project – Members Only_ assignment, but evolved into a **full-featured, production-style web application** with real authorization rules, role-based permissions, and relational data integrity.
+
+![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?logo=node.js&logoColor=white)
+![Passport.js](https://img.shields.io/badge/Passport.js-Authenticated-34E27A?logo=passport&logoColor=white)
+![Express](https://img.shields.io/badge/Express-5-000000?logo=express&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-blue?logo=postgresql)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.x-38bdf8?logo=tailwindcss)
+
+---
+
+## 🚀 Live Preview
+
+🔗 **Live App:**  
+👉 [**https://innercircles.devxsameer.me/**](https://innercircles.devxsameer.me/)
+
+Hosted on **Render** + **Neon PostgreSQL**.
+
+> Note: First visit may take a few seconds if Render has spun down the instance.
 
 ---
 
@@ -20,11 +48,12 @@ This project started as _The Odin Project – Members Only_ assignment, but evol
 
 ## ✨ Key Features
 
-### 🔐 Authentication & Sessions
+### 🔐 Authentication
 
-- Username-password authentication using **Passport.js (Local Strategy)**
-- Secure session handling with **PostgreSQL session store**
-- Login rate-limiting to prevent brute-force attacks
+- Local auth using **Passport.js**
+- Session-based login with PostgreSQL session store
+- **Bcrypt** password hashing
+- Rate-limited login endpoint (secure for production)
 
 ### 🧑‍🤝‍🧑 Circles (Communities)
 
@@ -38,16 +67,18 @@ This project started as _The Odin Project – Members Only_ assignment, but evol
   - Add members by username
   - Promote/demote members
   - Remove members (with strict rules)
+- SQL triggers keep `members_count` up to date automatically
 
 ### 📝 Posts & Privacy
 
-- Posts belong to a specific circle
-- Two visibility levels:
-  - `public` – visible to everyone
-  - `members_only` – visible only to circle members
-- **Author anonymity logic**
-  - Members see real usernames
-  - Non-members see posts as _Anonymous_
+- Create, edit, and delete posts inside circles
+- Visibility types:
+  - `public`
+  - `members_only`
+- Identity reveal is circle-based:
+  - Outside → **Anonymous**
+  - Inside → **Real username**
+- Pagination for all feeds
 
 ### 🛡 Authorization & Security
 
@@ -66,6 +97,36 @@ This project started as _The Odin Project – Members Only_ assignment, but evol
 - Popular circles ranked by member count
 - Indexed queries for efficient lookups
 - Clean, responsive UI using **Tailwind CSS**
+
+### 🏠 Homepage
+
+- Latest public posts
+- Most popular circles
+- Clean, Tailwind-powered design
+
+---
+
+## 📸 Screenshots
+
+**Home Page**
+
+![Home Page Screenshot](./public/screenshots/home_sc.png)
+
+**Circle Details Page**
+
+![Circle Details Page Screenshot](./public/screenshots/circle_details_sc.png)
+
+**Manage Circle Page**
+
+![Manage Circle Page Screenshot](./public/screenshots/manage_circle_sc.png)
+
+**All Posts Page**
+
+![All Posts Page Screenshot](./public/screenshots/all_posts_sc.png)
+
+**Create Post Page**
+
+![Create Post Page Screenshot](./public/screenshots/create_post_sc.png)
 
 ---
 
@@ -111,10 +172,11 @@ src/
 
 - **Node.js**
 - **Express 5**
-- **PostgreSQL**
-- **Passport.js**
+- **PostgreSQL (Neon)**
+- **Passport.js (local strategy)**
 - **express-session**
 - **bcrypt**
+- **connect-pg-simple (session store)**
 
 ### Frontend
 
@@ -126,7 +188,7 @@ src/
 - **pnpm**
 - **nodemon**
 - **dotenv**
-- **connect-pg-simple**
+- **Concurrently**
 
 ---
 
@@ -156,8 +218,7 @@ cd inner-circles
 ### 2. Install dependencies
 
 ```bash
-git clone https://github.com/devxsameer/inner-circles.git
-cd inner-circles
+pnpm install
 
 ```
 
@@ -237,5 +298,31 @@ This project is licensed under the **ISC License**.
 Inspired by **The Odin Project**,  
 expanded with production-style architecture, strict permissions,
 and real privacy rules.
+
+---
+
+## 👨‍💻 Author
+
+### **Sameer Ali**
+
+**Full-Stack Developer | Community-Driven Builder | Open-Source Contributor**
+
+Passionate about crafting clean, scalable applications and building community-based platforms.  
+Focused on JavaScript, Node.js, and modern full-stack development.
+
+### 🌍 **Links**
+
+- 🌐 **Portfolio:** [https://devxsameer.me](https://devxsameer.me)
+- 💼 **LinkedIn:** [https://www.linkedin.com/in/devxsameer/](https://www.linkedin.com/in/devxsameer/)
+- 🐦 **Twitter (X):** [https://x.com/devxsameer](https://x.com/devxsameer)
+- 💻 **GitHub:** [https://github.com/devxsameer](https://github.com/devxsameer)
+
+---
+
+If you like this project:
+
+#### 👉 Give it a star on GitHub! ⭐
+
+It truly helps!
 
 ---
