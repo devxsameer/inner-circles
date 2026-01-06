@@ -13,6 +13,8 @@ Node • Express • PostgreSQL • Passport • Tailwind
 
 It blends privacy, collaboration, and anonymity into a clean, simple user experience — making it a portfolio-grade full-stack project.
 
+This project emphasizes **authorization modeling, privacy boundaries, and relational integrity** over UI complexity.
+
 This project started as _The Odin Project – Members Only_ assignment, but evolved into a **full-featured, production-style web application** with real authorization rules, role-based permissions, and relational data integrity.
 
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?logo=node.js&logoColor=white)
@@ -36,13 +38,11 @@ Hosted on **Render** + **Neon PostgreSQL**.
 
 ## 🚀 Live Concept
 
-> **See posts. Join circles. Speak freely.**
->
-> In InnerCircles:
->
-> - Anyone can read **public posts**
-> - Only circle members can see **who wrote them**
-> - Each circle governs its own members, roles, and content
+InnerCircles enforces **context-aware identity visibility**:
+
+- Public posts hide author identity
+- Circle members see real usernames
+- Access rules are enforced consistently at route, service, and database levels
 
 ---
 
@@ -54,6 +54,8 @@ Hosted on **Render** + **Neon PostgreSQL**.
 - Session-based login with PostgreSQL session store
 - **Bcrypt** password hashing
 - Rate-limited login endpoint (secure for production)
+
+> This project intentionally uses **session-based authentication** to demonstrate traditional server-rendered auth flows, secure session storage, and Passport.js integration.
 
 ### 🧑‍🤝‍🧑 Circles (Communities)
 
@@ -86,13 +88,14 @@ Hosted on **Render** + **Neon PostgreSQL**.
 - Loader middlewares (`loadPost`, `loadCircle`, `loadMembership`)
 - Separation of concerns:
   - **Routes → Controllers → Services → Models**
-- Business rules enforced at:
-  - Service layer
-  - Database constraints
-  - PostgreSQL triggers
+- Business rules enforced across:
+  - Route-level permission checks
+  - Service-layer validation
+  - Database constraints & triggers
 
 ### 📊 Performance & UX
 
+- Viewer-aware SQL queries to avoid leaking member-only content
 - Pagination for posts and circles
 - Popular circles ranked by member count
 - Indexed queries for efficient lookups
@@ -103,6 +106,17 @@ Hosted on **Render** + **Neon PostgreSQL**.
 - Latest public posts
 - Most popular circles
 - Clean, Tailwind-powered design
+
+---
+
+## 📌 Why This Project Matters
+
+This project demonstrates:
+
+- Real-world authorization complexity (not just auth)
+- Privacy-first content visibility
+- Clean Express architecture with clear responsibility boundaries
+- Defensive database design with constraints and triggers
 
 ---
 
@@ -264,20 +278,9 @@ App runs at:
 
 ---
 
-## 📌 Why This Project Matters
-
-This project demonstrates:
-
-- ✅ Real-world authorization logic
-- ✅ Clean Express.js architecture
-- ✅ Thoughtful database design
-- ✅ Security-first mindset
-
----
-
 ## 🛣 Future Improvements
 
-Planned enhancements include:
+> This project is feature-complete. The items below reflect potential extensions rather than an active roadmap.
 
 - 🔐 CSRF protection
 - 🔑 OAuth login (Google / GitHub)
@@ -305,7 +308,8 @@ and real privacy rules.
 
 ### **Sameer Ali**
 
-**Full-Stack Developer | Community-Driven Builder | Open-Source Contributor**
+**Backend-focused Full-Stack Developer**  
+Interested in authorization systems, backend architecture, and scalable web applications
 
 Passionate about crafting clean, scalable applications and building community-based platforms.  
 Focused on JavaScript, Node.js, and modern full-stack development.
